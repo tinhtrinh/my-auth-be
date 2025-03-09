@@ -1,4 +1,5 @@
 ﻿//using Domain.Roles;
+using Application.Users;
 using Domain.Shared;
 using Domain.UserRules;
 
@@ -24,7 +25,9 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        //services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<Application.Users.IUserRepository, UserRepository>();
 
         services.AddScoped<IUserRuleRepository, UserRuleRepository>();
 

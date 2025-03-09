@@ -11,6 +11,8 @@ using Domain.Users;
 using Application.Users.GetUsers;
 //using Infrastructure.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation;
 
@@ -21,14 +23,10 @@ public class UserModule : ICarterModule
         app.MapGet("/getusers", 
             //[HasPermission(UserPermission.READ_USER)] 
         async (
-            string? searchTerm,
-            string? sortColumn,
-            string? sortOrder,
-            int? pageNumber,
-            int? pageSize,
+            [AsParameters] GetUsersRequest request,
             ISender sender) =>
         {
-            var query = new GetUsersQuery(searchTerm, sortColumn, sortOrder, pageNumber, pageSize);
+            var query = new GetUsersQuery(request);
 
             Result<GetUsersResponse> result = await sender.Send(query);
 

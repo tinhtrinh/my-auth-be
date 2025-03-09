@@ -1,8 +1,10 @@
-﻿namespace Application.Shared;
+﻿using Microsoft.EntityFrameworkCore;
 
-public abstract class PagedResponse<T>
+namespace Application.Shared;
+
+public class PagedResponse<TDTO>
 {
-    public List<T> Items { get; private set; }
+    public List<TDTO> Items { get; private set; } = [];
 
     public int PageNumber { get; private set; }
 
@@ -20,12 +22,27 @@ public abstract class PagedResponse<T>
 
     private const int DefaultPageSize = 50;
 
-    protected PagedResponse(IEnumerable<T> query, int? pageNumber, int? pageSize)
+    protected PagedResponse() { }
+
+    protected static async Task<TChild> CreateChildAsync<TChild>(
+        IQueryable<TDTO> query, 
+        int? pageNumber, 
+        int? pageSize)
+        where TChild : PagedResponse<TDTO>, new()
     {
-        TotalCount = query.Count();
-        PageNumber = pageNumber ?? DefaultPageNumber;
-        PageSize = pageSize ?? DefaultPageSize;
-        TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
-        Items = query.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToList();
+        var _totalCount = await query.CountAsync();
+        var _pageNumber = pageNumber ?? DefaultPageNumber;
+        var _pageSize = pageSize ?? DefaultPageSize;
+        var _totalPages = (int)Math.Ceiling(_totalCount / (double)_pageSize);
+        var _items = await query.Skip((_pageNumber - 1) * _pageSize).Take(_pageSize).ToListAsync();
+
+        return new TChild()
+        {
+            TotalCount = _totalCount,
+            PageNumber = _pageNumber,
+            PageSize = _pageSize,
+            TotalPages = _totalPages,
+            Items = _items
+        };
     }
 }

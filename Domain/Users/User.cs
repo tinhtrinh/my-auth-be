@@ -10,48 +10,62 @@ public class User
 
     public string Name { get; private set; }
 
-    public string Password { get; private set; }
+    public string? Password { get; private set; }
+
+    public DateTime? CreatedDate { get; private set; }
+
+    public UserId? CreatedById { get; private set; }
+
+    public DateTime? LastModifiedDate { get; private set; }
+
+    public UserId? LastModifiedById { get; private set; }
 
     public RefreshToken? RefreshToken { get; private set; }
 
     public ICollection<Role>? Roles { get; private set; }
 
-    private User(UserId id, string name, string password)
+    private User()
     {
-        Id = id;
-        Name = name;
-        Password = password;
+        Id = new UserId(new Guid());
+        Name = "";
     }
 
-    public static User Create(UserId id, string name, string password, RefreshToken? refreshToken = null, List<Role>? roles = null)
-    {
-        return new User(id, name, password)
-        {
-            RefreshToken = refreshToken,
-            Roles = roles
-        };
-    }
+    //private User(UserId id, string name, string password)
+    //{
+    //    Id = id;
+    //    Name = "";
+    //    Password = "";
+    //}
 
-    public static User Create(User user)
-    {
-        return new User(user.Id, user.Name, user.Password);
-    }
+    //public static User Create(UserId id, string name, string password, RefreshToken? refreshToken = null, List<Role>? roles = null)
+    //{
+    //    return new User(id, name, password)
+    //    {
+    //        RefreshToken = refreshToken,
+    //        Roles = roles
+    //    };
+    //}
 
-    public static User CreateWithRoles(User user)
-    {
-        return new User(user.Id, user.Name, user.Password)
-        {
-            Roles = user.Roles
-        };
-    }
+    //public static User Create(User user)
+    //{
+    //    return new User(user.Id, user.Name, user.Password);
+    //}
 
-    public static User CreateWithRefreshToken(User user)
-    {
-        return new User(user.Id, user.Name, user.Password)
-        {
-            RefreshToken = user.RefreshToken
-        };
-    }
+    //public static User CreateWithRoles(User user)
+    //{
+    //    return new User(user.Id, user.Name, user.Password)
+    //    {
+    //        Roles = user.Roles
+    //    };
+    //}
+
+    //public static User CreateWithRefreshToken(User user)
+    //{
+    //    return new User(user.Id, user.Name, user.Password)
+    //    {
+    //        RefreshToken = user.RefreshToken
+    //    };
+    //}
 
     public Result AddRefreshToken(string refreshTokenValue)
     {

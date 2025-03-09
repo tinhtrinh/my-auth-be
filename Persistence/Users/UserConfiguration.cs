@@ -15,9 +15,25 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 userId => userId.Value,
                 value => new UserId(value));
 
+        builder.Property(u => u.CreatedById)
+            .HasConversion(
+                createdById => createdById != null ? createdById.Value : (Guid?)null,
+                value => value.HasValue ? new UserId(value.Value) : null);
+
+        builder.Property(u => u.LastModifiedById)
+            .HasConversion(
+                lastModifiedById => lastModifiedById != null ? lastModifiedById.Value : (Guid?)null,
+                value => value.HasValue ? new UserId(value.Value) : null);
+
         builder.OwnsOne(u => u.RefreshToken, refreshTokenBuilder =>
         {
             refreshTokenBuilder.Property(r => r.Value);
         });
+
+        builder.HasIndex(u => u.Id);
+
+        builder.HasIndex(u => u.Name);
+
+        builder.HasIndex(u => u.CreatedDate);
     }
 }

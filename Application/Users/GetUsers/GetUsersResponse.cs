@@ -5,15 +5,12 @@ namespace Application.Users.GetUsers;
 
 public class GetUsersResponse : PagedResponse<GetUsersDTO>
 {
-    private GetUsersResponse(IEnumerable<GetUsersDTO> query, int? pageNumber, int? pageSize)
-        : base(query, pageNumber, pageSize)
-    {
+    public string? PlaceholderToTestExtra { get; private set; }
 
-    }
-
-    public static GetUsersResponse CreateAsync(List<User> users, int? pageNumber, int? pageSize)
+    public static async Task<GetUsersResponse> CreateAsync(IQueryable<GetUsersDTO> query, int? pageNumber, int? pageSize)
     {
-        var getUsersDTOs = users.Select(users => GetUsersDTO.Create(users));
-        return new GetUsersResponse(getUsersDTOs, pageNumber, pageSize);
+        var response = await CreateChildAsync<GetUsersResponse>(query, pageNumber, pageSize);
+        response.PlaceholderToTestExtra = "This is a placeholder to test the extension of class.";
+        return response;
     }
 }

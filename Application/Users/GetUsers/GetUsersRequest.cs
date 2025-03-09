@@ -1,7 +1,14 @@
-﻿namespace Application.Users.GetUsers;
+﻿using Application.Shared;
+
+namespace Application.Users.GetUsers;
 
 public record GetUsersRequest(string? SearchTerm,
     string? SortColumn,
     string? SortOrder,
     int? PageNumber,
-    int? PageSize);
+    int? PageSize) 
+    : PagedRequest(SearchTerm,
+        SortColumn, 
+        SortOrder, 
+        PageNumber, 
+        PageSize);

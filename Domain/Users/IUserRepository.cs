@@ -1,8 +1,10 @@
-﻿namespace Domain.Users;
+﻿using System.Collections;
+
+namespace Domain.Users;
 
 public interface IUserRepository
 {
-    Task<List<User>> GetUsers(string? searchTerm, string? sortColumn, string? sortOrder);
+    IQueryable<TDTO> GetUsers<TDTO>(string? searchTerm, string? sortColumn, string? sortOrder);
 
     Task<bool> IsNameUnique(string name);
 
