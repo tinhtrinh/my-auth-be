@@ -7,8 +7,8 @@ using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 //using Persistence.Roles;
-using Persistence.Shared;
 using Persistence.UserRules;
 using Persistence.Users;
 
@@ -23,13 +23,13 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DevDB"))
         );
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        //services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<Application.Abstractions.IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<Application.Users.IUserRepository, UserRepository>();
 
-        services.AddScoped<IUserRuleRepository, UserRuleRepository>();
+        //services.AddScoped<IUserRepository, UserRepository>();
+
+        //services.AddScoped<IUserRuleRepository, UserRuleRepository>();
 
         //services.AddScoped<IRoleRepository, RoleRepository>();
 

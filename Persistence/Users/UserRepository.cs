@@ -50,6 +50,16 @@ public class UserRepository : Application.Users.IUserRepository
             "lastModifiedDate" => user => user.LastModifiedDate,
             _ => user => user.CreatedDate
         };
+
+    public async Task<bool> IsNameUnique(string name)
+    {
+        return !await _dbContext.Set<User>().AnyAsync(u => u.Name.Equals(name));
+    }
+
+    public void Add(User user)
+    {
+        _dbContext.Set<User>().Add(user);
+    }
 }
 
 //public class UserRepository : IUserRepository

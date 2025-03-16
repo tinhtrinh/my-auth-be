@@ -26,8 +26,23 @@ public class User
 
     private User()
     {
-        Id = new UserId(new Guid());
+        Id = new UserId(Guid.NewGuid());
         Name = "";
+    }
+
+    public static User CreateForRegistration(string name, string password)
+    {
+        var newUserId = new UserId(Guid.NewGuid());
+
+        return new User()
+        {
+            Id = newUserId,
+            Name = name,
+            Password = password,
+            CreatedDate = DateTime.UtcNow,
+            CreatedById = newUserId,
+            LastModifiedDate = DateTime.UtcNow
+        };
     }
 
     //private User(UserId id, string name, string password)

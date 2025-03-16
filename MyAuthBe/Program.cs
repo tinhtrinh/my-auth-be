@@ -1,9 +1,7 @@
 using Application;
 using MyAuth.Middlewares;
-using Application;
 using Carter;
 using Infrastructure;
-using MyAuth.Middlewares;
 using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 

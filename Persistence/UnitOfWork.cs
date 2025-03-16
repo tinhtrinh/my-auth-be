@@ -1,6 +1,6 @@
-﻿using Domain.Shared;
+﻿using Application.Abstractions;
 
-namespace Persistence.Shared;
+namespace Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {

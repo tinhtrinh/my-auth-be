@@ -13,6 +13,7 @@ using Application.Users.GetUsers;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
+using Application.Users.Register;
 
 namespace Presentation;
 
@@ -35,16 +36,18 @@ public class UserModule : ICarterModule
                 onFailure: handleFailure => handleFailure);
         });
 
-        //app.MapPost("/register", async (RegisterRequest request, ISender sender) =>
-        //{
-        //    var command = RegisterCommand.Create(request);
+        app.MapPost("/register", async (
+            Application.Users.Register.RegisterRequest request, 
+            ISender sender) =>
+        {
+            var command = new RegisterCommand(request);
 
-        //    Result<RegisterResponse> result = await sender.Send(command);
+            Result<RegisterResponse> result = await sender.Send(command);
 
-        //    return result.Match(
-        //        onSuccess: value => Results.Ok(value),
-        //        onFailure: handleFailure => handleFailure);
-        //});
+            return result.Match(
+                onSuccess: value => Results.Ok(value),
+                onFailure: handleFailure => handleFailure);
+        });
 
         //app.MapPost("/login", async (LoginRequest request, ISender sender) =>
         //{

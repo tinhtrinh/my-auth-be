@@ -10,7 +10,7 @@ public static class DependencyInjection
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddSwaggerGen();
 
-        services.AddCarter();
+        services.AddCarter(configurator: option => option.WithValidatorLifetime(ServiceLifetime.Scoped));
 
         return services;
     }
