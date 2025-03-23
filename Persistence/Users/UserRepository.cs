@@ -1,13 +1,5 @@
-﻿using Application.Users;
-using Application.Users.GetUsers;
-
-using Domain.Roles;
-using Domain.UserRules;
-using Domain.Users;
+﻿using Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Persistence.Users;
 
@@ -19,37 +11,6 @@ public class UserRepository : Application.Users.IUserRepository
     {
         _dbContext = dbContext;
     }
-
-    public IQueryable<GetUsersDTO> GetUsers(string? searchTerm, string? sortColumn, string? sortOrder)
-    {
-        var usersQuery = _dbContext.Database
-            .SqlQuery<GetUsersDTO>($"SELECT [Id], [Name], [Password], [CreatedDate], [lastModifiedDate] FROM [User]");
-
-        if (!string.IsNullOrWhiteSpace(searchTerm))
-        {
-            usersQuery = usersQuery.Where(u => u.Name.Contains(searchTerm));
-        }
-
-        if (sortOrder?.ToLower() == "desc")
-        {
-            usersQuery = usersQuery.OrderByDescending(GetSortProperty(sortColumn));
-        }
-        else
-        {
-            usersQuery = usersQuery.OrderBy(GetSortProperty(sortColumn));
-        }
-
-        return usersQuery;
-    }
-
-    private static Expression<Func<GetUsersDTO, object>> GetSortProperty(string? SortColumn) =>
-        SortColumn?.ToLower() switch
-        {
-            "name" => user => user.Name,
-            "createdDate" => user => user.CreatedDate,
-            "lastModifiedDate" => user => user.LastModifiedDate,
-            _ => user => user.CreatedDate
-        };
 
     public async Task<bool> IsNameUnique(string name)
     {

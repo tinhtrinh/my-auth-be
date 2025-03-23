@@ -3,6 +3,7 @@ using MyAuth.Middlewares;
 using Carter;
 using Infrastructure;
 using Presentation;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,5 +34,7 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 //app.UseAuthorization();
 
 app.MapCarter();
+
+app.UseHangfireDashboard();
 
 app.Run();

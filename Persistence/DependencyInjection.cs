@@ -1,15 +1,8 @@
-﻿//using Domain.Roles;
-using Application.Users;
-using Domain.Shared;
-using Domain.UserRules;
-
-using Domain.Users;
+﻿using Application.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-//using Persistence.Roles;
-using Persistence.UserRules;
+using Persistence.Notifications;
 using Persistence.Users;
 
 namespace Persistence;
@@ -25,9 +18,9 @@ public static class DependencyInjection
 
         services.AddScoped<Application.Abstractions.IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<Application.Users.IUserRepository, UserRepository>();
+        services.AddUserPersistence();
 
-        //services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
 
         //services.AddScoped<IUserRuleRepository, UserRuleRepository>();
 

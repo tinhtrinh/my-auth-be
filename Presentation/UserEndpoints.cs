@@ -17,11 +17,13 @@ using Application.Users.Register;
 
 namespace Presentation;
 
-public class UserModule : ICarterModule
+public class UserEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/getusers", 
+        var group = app.MapGroup("api/users");
+
+        group.MapGet("", 
             //[HasPermission(UserPermission.READ_USER)] 
         async (
             [AsParameters] GetUsersRequest request,
@@ -36,7 +38,7 @@ public class UserModule : ICarterModule
                 onFailure: handleFailure => handleFailure);
         });
 
-        app.MapPost("/register", async (
+        group.MapPost("/register", async (
             Application.Users.Register.RegisterRequest request, 
             ISender sender) =>
         {
