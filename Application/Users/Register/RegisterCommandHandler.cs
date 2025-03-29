@@ -1,11 +1,9 @@
 ﻿using Application.Abstractions;
-using Application.Notifications;
+using Application.Notifications.AddNotification;
 using Domain.Notification;
 using Domain.Shared;
 using Domain.Users;
-using Hangfire;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Users.Register;
 
@@ -13,16 +11,16 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
 {
     private readonly IUserRepository _userRepository;
     private readonly Abstractions.IUnitOfWork _unitOfWork;
-    private readonly IBackgroundJobClient _backgroundJobClient;
+    private readonly IBackgroundService _backgroundService;
 
     public RegisterCommandHandler(
         IUserRepository userRepository, 
-        Abstractions.IUnitOfWork unitOfWork, 
-        IBackgroundJobClient backgroundJobClient)
+        Abstractions.IUnitOfWork unitOfWork,
+        IBackgroundService backgroundService)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
-        _backgroundJobClient = backgroundJobClient;
+        _backgroundService = backgroundService;
     }
 
     public async Task<Result<RegisterResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -35,19 +33,12 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
 
         var response = new RegisterResponse("test access token", "test refresh token");
 
-        var userName = newUser.Name;
-        var userId = newUser.Id;
-
         var notification = Notification.Create(
-                "New User Register",
-                "User name test no user name"
-                + newUser.Name 
-                +
-                " has registered.",
-                newUser.Id
-                );
+            "New User Register", 
+            $"User name {newUser.Name} has registered.", 
+            newUser.Id);
 
-        _backgroundJobClient.Enqueue<INotificationService>(service => service.SendNotification(notification, default));
+        _backgroundService.Enqueue<AddNotificationService>(service => service.AddNotification(notification, default));
 
         return Result.Success(response);
     }

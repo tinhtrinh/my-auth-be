@@ -4,6 +4,7 @@ using Carter;
 using Infrastructure;
 using Presentation;
 using Hangfire;
+using Infrastructure.Notification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +14,22 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
+builder.Services.AddCors();
+
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddPresentation();
 
 var app = builder.Build();
+
+app.UseCors(options =>
+{
+    options
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,5 +47,7 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapCarter();
 
 app.UseHangfireDashboard();
+
+app.MapHub<NotificationHub>("notification");
 
 app.Run();

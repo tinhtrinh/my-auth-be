@@ -3,7 +3,8 @@
 using Application.Abstractions;
 using Application.Notifications;
 using Hangfire;
-using Infrastructure.BackgroundService;
+using Infrastructure.Background;
+using Infrastructure.Notification;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -20,7 +21,11 @@ public static class DependencyInjection
 
         services.AddHangfireServer();
 
-        services.AddScoped<INotificationService, NotificationService.NotificationService>();
+        services.AddSignalR();
+
+        services.AddTransient<IBackgroundService, BackgroundService>();
+
+        services.AddTransient<IRealTimeNotifier, RealTimeNotifier>();
 
         //services.AddMyAuthentication();
 
