@@ -1,9 +1,10 @@
 ﻿using Application.Abstractions;
+using Application.Shared;
 using Domain.Notification;
 
 namespace Application.Notifications.AddNotification;
 
-public class AddNotificationService
+public class AddNotificationService : IAddNotificationService
 {
     private readonly INotificationRepository _notificationRepository;
     private readonly IUnitOfWork _unitOfWork;

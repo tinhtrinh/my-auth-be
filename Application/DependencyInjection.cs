@@ -1,6 +1,7 @@
 ﻿using Application.Behaviors;
 using Application.Notifications;
 using Application.Notifications.AddNotification;
+using Application.Shared;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 
-        services.AddTransient<AddNotificationService>();
+        services.AddTransient<IAddNotificationService, AddNotificationService>();
 
         return services;
     }

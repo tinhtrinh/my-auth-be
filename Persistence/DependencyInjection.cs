@@ -1,4 +1,5 @@
-﻿using Application.Notifications;
+﻿using Application.Abstractions;
+using Application.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DevDB"))
         );
 
-        services.AddScoped<Application.Abstractions.IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddUserPersistence();
 

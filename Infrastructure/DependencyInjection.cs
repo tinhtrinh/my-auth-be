@@ -17,13 +17,9 @@ public static class DependencyInjection
     {
         services.AddPersistence(configuration);
 
-        services.AddHangfire(options => options.UseSqlServerStorage(configuration.GetConnectionString("DevDB")));
-
-        services.AddHangfireServer();
+        services.AddBackgroundService(configuration);
 
         services.AddSignalR();
-
-        services.AddTransient<IBackgroundService, BackgroundService>();
 
         services.AddTransient<IRealTimeNotifier, RealTimeNotifier>();
 

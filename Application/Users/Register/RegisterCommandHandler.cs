@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions;
-using Application.Notifications.AddNotification;
+using Application.Shared;
 using Domain.Notification;
 using Domain.Shared;
 using Domain.Users;
@@ -38,7 +38,7 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
             $"User name {newUser.Name} has registered.", 
             newUser.Id);
 
-        _backgroundService.Enqueue<AddNotificationService>(service => service.AddNotification(notification, default));
+        _backgroundService.Enqueue<IAddNotificationService>(service => service.AddNotification(notification, default));
 
         return Result.Success(response);
     }

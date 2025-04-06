@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Users.GetUsers;
 namespace Persistence.Users;
 
-internal static class DependencyInjection
+internal static class UserExtensions
 {
     public static IServiceCollection AddUserPersistence(this IServiceCollection services)
     {
