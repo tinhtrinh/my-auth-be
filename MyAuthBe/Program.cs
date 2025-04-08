@@ -4,7 +4,7 @@ using Carter;
 using Infrastructure;
 using Presentation;
 using Hangfire;
-using Infrastructure.Notification;
+using Infrastructure.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 

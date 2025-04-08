@@ -1,3 +1,3 @@
-﻿namespace Domain.Notification;
+﻿namespace Domain.Notifications;
 
 public record NotificationId(Guid Value);

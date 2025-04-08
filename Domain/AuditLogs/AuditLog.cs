@@ -1,10 +1,12 @@
 ﻿using Domain.Users;
 
-namespace Domain.AuditLog;
+namespace Domain.AuditLogs;
 
 public class AuditLog
 {
     public AuditLogId Id { get; private set; }
+
+    public bool IsDeleted { get; private set; }
 
     public string Action { get; private set; }
 
@@ -27,6 +29,7 @@ public class AuditLog
     private AuditLog(Guid objectId, UserId changedById)
     {
         Id = new AuditLogId(Guid.NewGuid());
+        IsDeleted = false;
         Action = "";
         ObjectType = "";
         ObjectId = objectId;

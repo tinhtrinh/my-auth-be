@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.Shared;
-using Domain.Notification;
+using Domain.Notifications;
 using Domain.Shared;
 using Domain.Users;
 using MediatR;

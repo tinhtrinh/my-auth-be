@@ -1,4 +1,4 @@
-﻿using Domain.Notification;
+﻿using Domain.Notifications;
 using Domain.Roles;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;

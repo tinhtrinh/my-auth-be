@@ -17,6 +17,19 @@ public class UserRepository : Application.Users.IUserRepository
         return !await _dbContext.Set<User>().AnyAsync(u => u.Name.Equals(name));
     }
 
+    public async Task<bool> IsExisted(string id)
+    {
+        if(Guid.TryParse(id, out Guid parsedId))
+        {
+            var userId = new UserId(parsedId);
+            return await _dbContext.Set<User>().AnyAsync(u => u.Id == userId && !u.IsDeleted);
+        } 
+        else
+        {
+            return false;
+        }
+    }
+
     public void Add(User user)
     {
         _dbContext.Set<User>().Add(user);

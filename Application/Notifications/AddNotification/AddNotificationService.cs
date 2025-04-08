@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 using Application.Shared;
-using Domain.Notification;
+using Domain.Notifications;
 
 namespace Application.Notifications.AddNotification;
 

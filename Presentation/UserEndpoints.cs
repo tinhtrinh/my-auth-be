@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Application.Users.Register;
+using Application.Users.Delete;
 
 namespace Presentation;
 
@@ -48,6 +49,17 @@ public class UserEndpoints : ICarterModule
 
             return result.Match(
                 onSuccess: value => Results.Ok(value),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapDelete("", async (string id, ISender sender) =>
+        {
+            var command = new DeleteCommand(id);
+
+            Result result = await sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => Results.Ok(),
                 onFailure: handleFailure => handleFailure);
         });
 

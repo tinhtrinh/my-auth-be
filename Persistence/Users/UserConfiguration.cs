@@ -35,5 +35,15 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.Name);
 
         builder.HasIndex(u => u.CreatedDate);
+
+        builder.HasMany(u => u.Notifications)
+            .WithOne(n => n.User)
+            .HasForeignKey(n => n.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.AuditLogs)
+           .WithOne(n => n.User)
+           .HasForeignKey(n => n.ChangedById)
+           .OnDelete(DeleteBehavior.Cascade);
     }
 }

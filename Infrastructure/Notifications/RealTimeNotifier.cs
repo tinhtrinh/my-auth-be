@@ -1,7 +1,8 @@
 ﻿using Application.Notifications;
+using Domain.Notifications;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Infrastructure.Notification;
+namespace Infrastructure.Notifications;
 
 public class RealTimeNotifier : IRealTimeNotifier
 {
@@ -12,7 +13,7 @@ public class RealTimeNotifier : IRealTimeNotifier
         _hubContext = hubContext;
     }
 
-    public async Task Notify(Domain.Notification.Notification notification)
+    public async Task Notify(Notification notification)
     {
         await _hubContext.Clients.All.SendAsync("SendNotification", notification);
     }

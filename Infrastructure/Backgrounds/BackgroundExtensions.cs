@@ -3,7 +3,7 @@ using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Background;
+namespace Infrastructure.Backgrounds;
 
 public static class BackgroundExtensions
 {

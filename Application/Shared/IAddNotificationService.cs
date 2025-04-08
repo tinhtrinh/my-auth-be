@@ -1,4 +1,4 @@
-﻿using Domain.Notification;
+﻿using Domain.Notifications;
 
 namespace Application.Shared;
 

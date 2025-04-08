@@ -1,12 +1,15 @@
-﻿using Domain.Roles;
+﻿using Domain.AuditLogs;
+using Domain.Notifications;
+using Domain.Roles;
 using Domain.Shared;
-using System.Data;
 
 namespace Domain.Users;
 
 public class User
 {
     public UserId Id { get; private set; }
+
+    public bool IsDeleted { get; private set; }
 
     public string Name { get; private set; }
 
@@ -24,9 +27,14 @@ public class User
 
     public ICollection<Role>? Roles { get; private set; }
 
+    public ICollection<Notification>? Notifications { get; private set; }
+
+    public ICollection<AuditLog>? AuditLogs { get; private set; }
+
     private User()
     {
         Id = new UserId(Guid.NewGuid());
+        IsDeleted = false;
         Name = "";
     }
 

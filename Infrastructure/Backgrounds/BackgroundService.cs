@@ -2,7 +2,7 @@
 using Hangfire;
 using System.Linq.Expressions;
 
-namespace Infrastructure.Background;
+namespace Infrastructure.Backgrounds;
 
 public class BackgroundService : IBackgroundService
 {

@@ -1,10 +1,8 @@
 ﻿//using Infrastructure.Authentication;
 //using Infrastructure.Authorization;
-using Application.Abstractions;
 using Application.Notifications;
-using Hangfire;
-using Infrastructure.Background;
-using Infrastructure.Notification;
+using Infrastructure.Backgrounds;
+using Infrastructure.Notifications;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;

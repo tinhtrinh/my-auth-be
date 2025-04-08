@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions;
-using Domain.AuditLog;
+using Domain.AuditLogs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

@@ -1,4 +1,4 @@
-﻿using Domain.AuditLog;
+﻿using Domain.AuditLogs;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

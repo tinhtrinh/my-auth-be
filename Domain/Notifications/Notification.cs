@@ -1,10 +1,12 @@
 ﻿using Domain.Users;
 
-namespace Domain.Notification;
+namespace Domain.Notifications;
 
 public class Notification
 {
     public NotificationId Id { get; private set; }
+
+    public bool IsDeleted { get; private set; }
 
     public string Title { get; private set; }
 
@@ -19,6 +21,7 @@ public class Notification
     public Notification(NotificationId id, string title, string message, DateTime createdDate, UserId userId)
     {
         Id = id;
+        IsDeleted = false;
         Title = title;
         Message = message;
         CreatedDate = createdDate;

@@ -6,6 +6,8 @@ public sealed class Role
 {
     public RoleId Id { get; private set; }
 
+    public bool IsDeleted { get; private set; }
+
     public string Name { get; private set; }
 
     public ICollection<Permission>? Permissions { get; private set; }
@@ -17,6 +19,7 @@ public sealed class Role
     public Role(RoleId id, string name)
     {
         Id = id;
+        IsDeleted = false;
         Name = name;
     }
 

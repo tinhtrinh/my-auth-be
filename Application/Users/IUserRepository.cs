@@ -5,5 +5,7 @@ public interface IUserRepository
 {
     Task<bool> IsNameUnique(string name);
 
+    Task<bool> IsExisted(string id);
+
     void Add(User user);
 }

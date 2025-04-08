@@ -1,5 +1,5 @@
 ﻿using Application.Notifications;
-using Domain.Notification;
+using Domain.Notifications;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
