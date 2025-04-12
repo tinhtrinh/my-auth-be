@@ -10,11 +10,10 @@ using Carter;
 using Domain.Users;
 using Application.Users.GetUsers;
 //using Infrastructure.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc;
 using Application.Users.Register;
 using Application.Users.Delete;
+using Application.Users.Update;
+using RegisterRequest = Application.Users.Register.RegisterRequest;
 
 namespace Presentation;
 
@@ -39,9 +38,7 @@ public class UserEndpoints : ICarterModule
                 onFailure: handleFailure => handleFailure);
         });
 
-        group.MapPost("/register", async (
-            Application.Users.Register.RegisterRequest request, 
-            ISender sender) =>
+        group.MapPost("/register", async (RegisterRequest request, ISender sender) =>
         {
             var command = new RegisterCommand(request);
 
@@ -57,6 +54,17 @@ public class UserEndpoints : ICarterModule
             var command = new DeleteCommand(id);
 
             Result result = await sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => Results.Ok(),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapPatch("", async (UpdateRequest request, ISender sender) =>
+        {
+            var command = new UpdateCommand(request);
+
+            var result = await sender.Send(command);
 
             return result.Match(
                 onSuccess: () => Results.Ok(),

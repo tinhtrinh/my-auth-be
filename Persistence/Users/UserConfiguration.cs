@@ -45,5 +45,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
            .WithOne(n => n.User)
            .HasForeignKey(n => n.ChangedById)
            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Ignore(u => u.AuditableProperties);
     }
 }

@@ -22,7 +22,7 @@ public class UserRepository : Application.Users.IUserRepository
         if(Guid.TryParse(id, out Guid parsedId))
         {
             var userId = new UserId(parsedId);
-            return await _dbContext.Set<User>().AnyAsync(u => u.Id == userId && !u.IsDeleted);
+            return await _dbContext.Set<User>().AnyAsync(u => u.Id == userId && u.IsDeleted != true);
         } 
         else
         {
@@ -33,6 +33,11 @@ public class UserRepository : Application.Users.IUserRepository
     public void Add(User user)
     {
         _dbContext.Set<User>().Add(user);
+    }
+
+    public void Update(User user)
+    {
+        _dbContext.Set<User>().Update(user);
     }
 }
 

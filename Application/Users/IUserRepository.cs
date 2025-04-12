@@ -8,4 +8,6 @@ public interface IUserRepository
     Task<bool> IsExisted(string id);
 
     void Add(User user);
+
+    void Update(User user);
 }

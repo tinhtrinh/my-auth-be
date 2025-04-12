@@ -27,22 +27,4 @@ public class Notification
         CreatedDate = createdDate;
         UserId = userId;
     }
-
-    private Notification(UserId userId)
-    {
-        Id = new NotificationId(Guid.NewGuid());
-        Title = "";
-        Message = "";
-        CreatedDate = DateTime.UtcNow;
-        UserId = userId;
-    }
-
-    public static Notification Create(string title, string message, UserId userId)
-    {
-        return new Notification(userId)
-        {
-            Title = title,
-            Message = message
-        };
-    }
 }

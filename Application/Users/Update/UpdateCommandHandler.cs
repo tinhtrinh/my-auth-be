@@ -5,46 +5,50 @@ using Domain.Shared;
 using Domain.Users;
 using MediatR;
 
-namespace Application.Users.Register;
+namespace Application.Users.Update;
 
-internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterResponse>>
+internal sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result>
 {
+    private readonly IUpdateUserFinder _updateUserFinder;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBackgroundService _backgroundService;
 
-    public RegisterCommandHandler(
+    public UpdateCommandHandler(
+        IUpdateUserFinder updateUserFinder,
         IUserRepository userRepository, 
         IUnitOfWork unitOfWork,
         IBackgroundService backgroundService)
     {
+        _updateUserFinder = updateUserFinder;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _backgroundService = backgroundService;
     }
 
-    public async Task<Result<RegisterResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateCommand request, CancellationToken cancellationToken)
     {
-        var newUser = new User.Builder(new UserId(Guid.NewGuid()), request.Name)
-            .SetPassword(request.Password)
-            .SetIsDeleted(false)
-            .Build();
+        var user = await _updateUserFinder.FindAsync(request.Id);
+        if(user is null)
+        {
+            return Result.Failure(UserError.UserNotFound);
+        }
 
-        _userRepository.Add(newUser);
+        var result = user.ChangeNameAndPassword(request.Name, request.Password);
+        if (result.IsFailure) return result;
 
+        _userRepository.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        var response = new RegisterResponse("test access token", "test refresh token");
 
         var notification = new Notification(
             new NotificationId(Guid.NewGuid()),
-            "New User Register",
-            $"User name {newUser.Name} has registered.",
+            "User Updated",
+            $"User name {user.Name} has been updated.",
             DateTime.UtcNow,
-            newUser.Id);
+            user.Id);
 
         _backgroundService.Enqueue<IAddNotificationService>(service => service.AddNotification(notification, default));
 
-        return Result.Success(response);
+        return Result.Success();
     }
 }

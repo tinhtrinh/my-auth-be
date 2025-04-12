@@ -2,6 +2,7 @@
 using Domain.AuditLogs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Persistence;
 
@@ -25,7 +26,7 @@ public class UnitOfWork : IUnitOfWork
     {
         var auditEntries = new List<AuditLog>();
 
-        var entries = _dbContext.ChangeTracker.Entries()
+        var entries = _dbContext.ChangeTracker.Entries<AuditableBase>()
             .Where(e => 
                 e.State == EntityState.Added 
                 || e.State == EntityState.Modified 
@@ -44,44 +45,51 @@ public class UnitOfWork : IUnitOfWork
             {
                 case EntityState.Added:
                     auditEntries.Add(
-                        AuditLog.Create(
-                            "Created", 
+                        new AuditLog.Builder(
+                            new AuditLogId(Guid.NewGuid()),
+                            "Created",
                             objectType,
                             objectId,
                             new Domain.Users.UserId(new Guid("E3CFF717-B833-49BD-8B0E-3919BE992B7C")),
-                            null,
-                            null,
-                            null)
+                            DateTime.UtcNow)
+                        .SetIsDeleted(false)
+                        .Build()
                     );
                     break;
 
                 case EntityState.Deleted:
                     auditEntries.Add(
-                        AuditLog.Create(
+                        new AuditLog.Builder(
+                            new AuditLogId(Guid.NewGuid()),
                             "Deleted",
                             objectType,
                             objectId,
                             new Domain.Users.UserId(new Guid("E3CFF717-B833-49BD-8B0E-3919BE992B7C")),
-                            null,
-                            null,
-                            null)
+                            DateTime.UtcNow)
+                        .SetIsDeleted(false)
+                        .Build()
                     );
                     break;
 
                 case EntityState.Modified:
-                    var properties = entry.Properties.Where(p => p.IsModified);
+                    var properties = entry.Properties
+                        .Where(p => p.IsModified && entry.Entity.IsAuditable(p.Metadata.Name));
+
                     foreach(var property in properties)
                     {
                         auditEntries.Add(
-                        AuditLog.Create(
-                            "Modified",
-                            objectType,
-                            objectId,
-                            new Domain.Users.UserId(new Guid("E3CFF717-B833-49BD-8B0E-3919BE992B7C")),
-                            property.Metadata.Name,
-                            property.OriginalValue?.ToString(),
-                            property.CurrentValue?.ToString())
-                        );
+                            new AuditLog.Builder(
+                                new AuditLogId(Guid.NewGuid()),
+                                "Modified",
+                                objectType,
+                                objectId,
+                                new Domain.Users.UserId(new Guid("E3CFF717-B833-49BD-8B0E-3919BE992B7C")),
+                                DateTime.UtcNow)
+                            .SetIsDeleted(false)
+                            .SetPropertyName(property.Metadata.Name)
+                            .SetOldValue(property.OriginalValue?.ToString())
+                            .SetNewValue(property.CurrentValue?.ToString())
+                            .Build());
                     }
                     break;
 

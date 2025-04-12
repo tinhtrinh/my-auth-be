@@ -5,23 +5,15 @@ using Domain.Shared;
 
 namespace Domain.Users;
 
-public class User
+public partial class User : AuditableUser
 {
     public UserId Id { get; private set; }
 
-    public bool IsDeleted { get; private set; }
+    public bool? IsDeleted { get; private set; }
 
     public string Name { get; private set; }
 
     public string? Password { get; private set; }
-
-    public DateTime? CreatedDate { get; private set; }
-
-    public UserId? CreatedById { get; private set; }
-
-    public DateTime? LastModifiedDate { get; private set; }
-
-    public UserId? LastModifiedById { get; private set; }
 
     public RefreshToken? RefreshToken { get; private set; }
 
@@ -31,27 +23,23 @@ public class User
 
     public ICollection<AuditLog>? AuditLogs { get; private set; }
 
-    private User()
+    public Result ChangeNameAndPassword(string name, string password)
     {
-        Id = new UserId(Guid.NewGuid());
-        IsDeleted = false;
-        Name = "";
-    }
-
-    public static User CreateForRegistration(string name, string password)
-    {
-        var newUserId = new UserId(Guid.NewGuid());
-
-        return new User()
+        if(name.Length < UserRule.MinNameLength)
         {
-            Id = newUserId,
-            Name = name,
-            Password = password,
-            CreatedDate = DateTime.UtcNow,
-            CreatedById = newUserId,
-            LastModifiedDate = DateTime.UtcNow
-        };
+            return Result.Failure(UserError.ShortName(UserRule.MinNameLength));
+        }
+
+        if (password.Length < UserRule.MinPasswordLength)
+        {
+            return Result.Failure(UserError.ShortName(UserRule.MinNameLength));
+        }
+
+        Name = name;
+        Password = password;
+        return Result.Success();
     }
+
 
     //private User(UserId id, string name, string password)
     //{

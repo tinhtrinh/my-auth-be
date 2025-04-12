@@ -2,11 +2,11 @@
 
 namespace Domain.AuditLogs;
 
-public class AuditLog
+public partial class AuditLog
 {
     public AuditLogId Id { get; private set; }
 
-    public bool IsDeleted { get; private set; }
+    public bool? IsDeleted { get; private set; }
 
     public string Action { get; private set; }
 
@@ -20,39 +20,9 @@ public class AuditLog
 
     public DateTime Timestamp { get; private set; }
 
-    public string? PropertyName { get; private set; } = null;
+    public string? PropertyName { get; private set; }
 
     public string? OldValue { get; private set; }
 
     public string? NewValue { get; private set; }
-
-    private AuditLog(Guid objectId, UserId changedById)
-    {
-        Id = new AuditLogId(Guid.NewGuid());
-        IsDeleted = false;
-        Action = "";
-        ObjectType = "";
-        ObjectId = objectId;
-        ChangedById = changedById;
-        Timestamp = DateTime.UtcNow;
-    }
-
-    public static AuditLog Create(
-        string action,
-        string objectType,
-        Guid objectId,
-        UserId changedById, 
-        string? propertyName,
-        string? oldValue, 
-        string? newValue)
-    {
-        return new AuditLog(objectId, changedById)
-        {
-            Action = action,
-            ObjectType = objectType,
-            PropertyName = propertyName,
-            OldValue = oldValue,
-            NewValue = newValue
-        };
-    }
 }
