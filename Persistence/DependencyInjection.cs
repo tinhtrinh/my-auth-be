@@ -3,6 +3,7 @@ using Application.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Cleaners;
 using Persistence.Notifications;
 using Persistence.Users;
 
@@ -22,6 +23,8 @@ public static class DependencyInjection
         services.AddUserPersistence();
 
         services.AddScoped<INotificationRepository, NotificationRepository>();
+
+        services.AddCleaner();
 
         //services.AddScoped<IUserRuleRepository, UserRuleRepository>();
 

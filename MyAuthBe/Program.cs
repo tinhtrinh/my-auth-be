@@ -5,6 +5,7 @@ using Infrastructure;
 using Presentation;
 using Hangfire;
 using Infrastructure.Notifications;
+using Persistence.Cleaners;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+app.UsePersistenceCleaner();
 
 //app.UseAuthentication();
 

@@ -16,7 +16,7 @@ public class GetUsersQueryService : IGetUsersQueryService
     public IQueryable<GetUsersDTO> GetUsers(string? searchTerm, string? sortColumn, string? sortOrder)
     {
         var usersQuery = _dbContext.Database
-            .SqlQuery<GetUsersDTO>($"SELECT [Id], [Name], [Password], [CreatedDate], [lastModifiedDate] FROM [User]");
+            .SqlQuery<GetUsersDTO>($"SELECT [Id], [Name], [Password], [CreatedDate], [LastModifiedDate] FROM [User] WHERE IsDeleted IS Not NULL AND CreatedDate IS Not NULL AND LastModifiedDate IS Not NULL");
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
