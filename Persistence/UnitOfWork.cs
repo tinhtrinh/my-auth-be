@@ -44,6 +44,10 @@ public class UnitOfWork : IUnitOfWork
             switch (entry.State)
             {
                 case EntityState.Added:
+
+                    entry.Property(e => e.CreatedDate).CurrentValue = DateTime.UtcNow;
+                    entry.Property(e => e.LastModifiedDate).CurrentValue = DateTime.UtcNow;
+
                     auditEntries.Add(
                         new AuditLog.Builder(
                             new AuditLogId(Guid.NewGuid()),
@@ -55,9 +59,13 @@ public class UnitOfWork : IUnitOfWork
                         .SetIsDeleted(false)
                         .Build()
                     );
+
                     break;
 
                 case EntityState.Deleted:
+
+                    entry.Property(e => e.LastModifiedDate).CurrentValue = DateTime.UtcNow;
+
                     auditEntries.Add(
                         new AuditLog.Builder(
                             new AuditLogId(Guid.NewGuid()),
@@ -69,9 +77,13 @@ public class UnitOfWork : IUnitOfWork
                         .SetIsDeleted(false)
                         .Build()
                     );
+
                     break;
 
                 case EntityState.Modified:
+
+                    entry.Property(e => e.LastModifiedDate).CurrentValue = DateTime.UtcNow;
+
                     var properties = entry.Properties
                         .Where(p => p.IsModified && entry.Entity.IsAuditable(p.Metadata.Name));
 
@@ -91,6 +103,7 @@ public class UnitOfWork : IUnitOfWork
                             .SetNewValue(property.CurrentValue?.ToString())
                             .Build());
                     }
+
                     break;
 
                 default:

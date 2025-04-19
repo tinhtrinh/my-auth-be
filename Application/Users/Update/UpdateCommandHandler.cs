@@ -10,7 +10,6 @@ namespace Application.Users.Update;
 internal sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result>
 {
     private readonly IUpdateUserFinder _updateUserFinder;
-    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBackgroundService _backgroundService;
 
@@ -21,7 +20,6 @@ internal sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Resu
         IBackgroundService backgroundService)
     {
         _updateUserFinder = updateUserFinder;
-        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _backgroundService = backgroundService;
     }
@@ -37,7 +35,6 @@ internal sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Resu
         var result = user.ChangeNameAndPassword(request.Name, request.Password);
         if (result.IsFailure) return result;
 
-        _userRepository.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var notification = new Notification(

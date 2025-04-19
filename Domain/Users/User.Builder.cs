@@ -30,7 +30,7 @@ public partial class User
             return this;
         }
 
-        public Builder SetPassword(string password)
+        public Builder SetPassword(string? password)
         {
             Password = password;
             return this;

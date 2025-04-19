@@ -16,9 +16,14 @@ public class UpdateUserFinder : IUpdateUserFinder
     public async Task<User?> FindAsync(string id)
     {
         var userId = new UserId(new Guid(id));
-        return await _dbContext.Set<User>()
+
+        var user = await _dbContext.Set<User>()
             .Where(u => u.Id == userId)
-            .Select(u => new User.Builder(u.Id, u.Name).Build())
+            .Select(u => new User.Builder(u.Id, u.Name).SetPassword(u.Password).Build())
             .FirstOrDefaultAsync();
+
+        if(user is not null) _dbContext.Attach(user);
+
+        return user;
     }
 }
