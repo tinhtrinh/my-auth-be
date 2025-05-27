@@ -14,6 +14,7 @@ using Application.Users.Register;
 using Application.Users.Delete;
 using Application.Users.Update;
 using RegisterRequest = Application.Users.Register.RegisterRequest;
+using Application.Users.ListView;
 
 namespace Presentation;
 
@@ -68,6 +69,15 @@ public class UserEndpoints : ICarterModule
 
             return result.Match(
                 onSuccess: () => Results.Ok(),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapPost("/list-view", async (GetUserListRequest request, ISender sender) =>
+        {
+            Result<GetUserListResponse> result = await sender.Send(request);
+
+            return result.Match(
+                onSuccess: value => Results.Ok(value),
                 onFailure: handleFailure => handleFailure);
         });
 
