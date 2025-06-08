@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Routing;
 using Presentation.Extensions;
 using Carter;
 //using Application.Users.Login;
-using Domain.Users;
 using Application.Users.GetUsers;
 //using Infrastructure.Authorization;
 using Application.Users.Register;
@@ -15,6 +14,7 @@ using Application.Users.Delete;
 using Application.Users.Update;
 using RegisterRequest = Application.Users.Register.RegisterRequest;
 using Application.Users.ListView;
+using Application.Users.SendVerifyEmail;
 
 namespace Presentation;
 
@@ -78,6 +78,16 @@ public class UserEndpoints : ICarterModule
 
             return result.Match(
                 onSuccess: value => Results.Ok(value),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapPost("/send-verify-email", async (ISender sender) =>
+        {
+            var command = new SendVerifyEmailCommand();
+            Result result = await sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => Results.Ok(),
                 onFailure: handleFailure => handleFailure);
         });
 

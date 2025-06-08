@@ -2,6 +2,7 @@
 //using Infrastructure.Authorization;
 using Application.Notifications;
 using Infrastructure.Backgrounds;
+using Infrastructure.Email;
 using Infrastructure.Notifications;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,8 @@ public static class DependencyInjection
         services.AddSignalR();
 
         services.AddTransient<IRealTimeNotifier, RealTimeNotifier>();
+
+        services.AddEmailService();
 
         //services.AddMyAuthentication();
 
