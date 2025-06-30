@@ -1,4 +1,4 @@
-﻿namespace Application.ListViews.Shared;
+﻿namespace Application.Shared.ListView;
 
 public class FilterCondition
 {

@@ -14,9 +14,13 @@ internal sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Resu
 
     public async Task<Result<GetUsersResponse>> Handle(GetUsersQuery query, CancellationToken cancellationToken)
     {
-        var users = _getUsersQueryService.GetUsers(query.SearchTerm, query.SortColumn, query.SortOrder);
+        var users = await _getUsersQueryService.GetUsers(query.SearchTerm, query.SortColumn, query.SortOrder);
 
-        var response = await GetUsersResponse.CreateAsync(users, query.PageNumber, query.PageSize);
+        var totalCount = await _getUsersQueryService.CountAsync();
+
+        var filteredCount = await _getUsersQueryService.FilteredCountAsync();
+
+        var response = new GetUsersResponse(users, query.PageNumber, query.PageSize, totalCount, filteredCount);
 
         return Result.Success(response);
     }

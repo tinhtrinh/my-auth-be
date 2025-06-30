@@ -1,4 +1,4 @@
-﻿using Application.Shared;
+﻿using Application.Shared.Pagination;
 using Domain.Shared;
 using MediatR;
 

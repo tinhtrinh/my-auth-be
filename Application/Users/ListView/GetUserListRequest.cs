@@ -1,4 +1,4 @@
-﻿using Application.ListViews.Shared;
+﻿using Application.Shared.ListView;
 using Domain.Shared;
 using MediatR;
 

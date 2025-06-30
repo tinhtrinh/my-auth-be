@@ -1,4 +1,4 @@
-﻿namespace Application.Shared;
+﻿namespace Application.Shared.Pagination;
 
 public record PagedQuery
 {

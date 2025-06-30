@@ -1,4 +1,4 @@
-﻿using Application.ListViews.Shared;
+﻿using Application.Shared.ListView;
 using Application.Users.ListView;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +19,7 @@ public class GetUserListService : IGetUserListService
 
     public async Task<int> CountAsync()
     {
-        return await _dbContext.Set<User>().CountAsync();
+        return await _dbContext.Set<User>().Where(u => u.IsDeleted != true).CountAsync();
     }
 
     public async Task<int> FilteredCountAsync()

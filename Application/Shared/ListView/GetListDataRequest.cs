@@ -1,6 +1,6 @@
 ﻿using Application.Shared.Pagination;
 
-namespace Application.ListViews.Shared;
+namespace Application.Shared.ListView;
 
 public record GetListDataRequest : PagedRequest
 {

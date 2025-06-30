@@ -1,8 +1,9 @@
-﻿using Application.ListViews.Shared;
+﻿using Application.Shared.ListView;
+using Application.Shared.Pagination;
 
 namespace Application.Users.ListView;
 
-public interface IGetUserListService
+public interface IGetUserListService : ICountDataService
 {
     Task<List<object>> GetUserListAsync(
         List<string> columns,
@@ -13,8 +14,4 @@ public interface IGetUserListService
         string? sortOrder,
         int? pageNumber,
         int? pageSize);
-
-    Task<int> CountAsync();
-
-    Task<int> FilteredCountAsync();
 }

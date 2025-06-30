@@ -1,16 +1,25 @@
 ﻿using Application.Shared;
+using Application.Shared.Pagination;
 using Domain.Users;
 
 namespace Application.Users.GetUsers;
 
-public class GetUsersResponse : PagedResponse<GetUsersDTO>
+public record GetUsersResponse : PagedResponse<GetUsersDTO>
 {
     public string? PlaceholderToTestExtra { get; private set; }
 
-    public static async Task<GetUsersResponse> CreateAsync(IQueryable<GetUsersDTO> query, int? pageNumber, int? pageSize)
+    public GetUsersResponse(
+        List<GetUsersDTO> items,
+        int? pageNumber,
+        int? pageSize,
+        int totalCount,
+        int filteredCount) : base(
+            items,
+            pageNumber,
+            pageSize,
+            totalCount,
+            filteredCount)
     {
-        var response = await CreateChildAsync<GetUsersResponse>(query, pageNumber, pageSize);
-        response.PlaceholderToTestExtra = "This is a placeholder to test the extension of class.";
-        return response;
+        PlaceholderToTestExtra = "This is a placeholder to test the extension of class.";
     }
 }

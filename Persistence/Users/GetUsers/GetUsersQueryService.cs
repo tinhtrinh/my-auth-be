@@ -1,4 +1,5 @@
 ﻿using Application.Users.GetUsers;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -7,13 +8,15 @@ namespace Persistence.Users.GetUsers;
 public class GetUsersQueryService : IGetUsersQueryService
 {
     private readonly MyAuthDbContext _dbContext;
+    private IQueryable<object>? _usersQuery;
 
     public GetUsersQueryService(MyAuthDbContext dbContext)
     {
         _dbContext = dbContext;
+        _usersQuery = null;
     }
 
-    public IQueryable<GetUsersDTO> GetUsers(string? searchTerm, string? sortColumn, string? sortOrder)
+    public async Task<List<GetUsersDTO>> GetUsers(string? searchTerm, string? sortColumn, string? sortOrder)
     {
         var usersQuery = _dbContext.Database
             .SqlQuery<GetUsersDTO>($"SELECT [Id], [Name], [Password], [CreatedDate], [LastModifiedDate] FROM [User] WHERE IsDeleted IS Not NULL AND CreatedDate IS Not NULL AND LastModifiedDate IS Not NULL");
@@ -21,6 +24,7 @@ public class GetUsersQueryService : IGetUsersQueryService
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             usersQuery = usersQuery.Where(u => u.Name.Contains(searchTerm));
+            _usersQuery = usersQuery;
         }
 
         if (sortOrder?.ToLower() == "desc")
@@ -32,7 +36,7 @@ public class GetUsersQueryService : IGetUsersQueryService
             usersQuery = usersQuery.OrderBy(GetSortProperty(sortColumn));
         }
 
-        return usersQuery;
+        return await usersQuery.ToListAsync();
     }
 
     private static Expression<Func<GetUsersDTO, object>> GetSortProperty(string? SortColumn) =>
@@ -43,4 +47,15 @@ public class GetUsersQueryService : IGetUsersQueryService
             "lastModifiedDate" => user => user.LastModifiedDate,
             _ => user => user.CreatedDate
         };
+
+    public async Task<int> CountAsync()
+    {
+        return await _dbContext.Set<User>().Where(u => u.IsDeleted != true).CountAsync();
+    }
+
+    public async Task<int> FilteredCountAsync()
+    {
+        if (_usersQuery is null) return 0;
+        return await _usersQuery.CountAsync();
+    }
 }
