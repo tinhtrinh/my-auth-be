@@ -12,8 +12,8 @@ public static class EmailExtensions
         services.AddTransient<IRazorLightEngine>(sp =>
         {
             return new RazorLightEngineBuilder()
-                .UseEmbeddedResourcesProject(typeof(DependencyInjection))
-                .SetOperatingAssembly(typeof(DependencyInjection).Assembly)
+                .UseEmbeddedResourcesProject(typeof(InfrastructureExtensions))
+                .SetOperatingAssembly(typeof(InfrastructureExtensions).Assembly)
                 .UseMemoryCachingProvider()
                 .Build();
         });

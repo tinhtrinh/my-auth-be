@@ -1,6 +1,6 @@
-﻿//using Infrastructure.Authentication;
-//using Infrastructure.Authorization;
+﻿//using Infrastructure.Authorization;
 using Application.Notifications;
+using Infrastructure.Authentication;
 using Infrastructure.Backgrounds;
 using Infrastructure.Email;
 using Infrastructure.Notifications;
@@ -10,7 +10,7 @@ using Persistence;
 
 namespace Infrastructure;
 
-public static class DependencyInjection
+public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
@@ -24,7 +24,7 @@ public static class DependencyInjection
 
         services.AddEmailService();
 
-        //services.AddMyAuthentication();
+        services.AddMyAuthentication();
 
         //services.AddMyAuthorization();
 

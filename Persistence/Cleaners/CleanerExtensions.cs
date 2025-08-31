@@ -23,7 +23,7 @@ public static class CleanerExtensions
     private static void AddDeletedRecordsCleaners(IServiceCollection services)
     {
         var cleanerType = typeof(IDeletedRecordsCleaner);
-        var assembly = typeof(DependencyInjection).Assembly;
+        var assembly = typeof(CleanerExtensions).Assembly;
         var cleaners = assembly.GetTypes()
             .Where(t => cleanerType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
         foreach (var cleaner in cleaners)
