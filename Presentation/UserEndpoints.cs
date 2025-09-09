@@ -8,13 +8,15 @@ using Presentation.Extensions;
 using Carter;
 //using Application.Users.Login;
 using Application.Users.GetUsers;
-//using Infrastructure.Authorization;
 using Application.Users.Register;
 using Application.Users.Delete;
 using Application.Users.Update;
-using RegisterRequest = Application.Users.Register.RegisterRequest;
 using Application.Users.ListView;
 using Application.Users.SendVerifyEmail;
+using Infrastructure.Authorization;
+using Domain.Users;
+using Microsoft.AspNetCore.Authorization;
+using Application.Users.Login;
 
 namespace Presentation;
 
@@ -25,7 +27,8 @@ public class UserEndpoints : ICarterModule
         var group = app.MapGroup("api/users");
 
         group.MapGet("", 
-            //[HasPermission(UserPermission.READ_USER)] 
+            //[HasPermission(UserPermission.READ_USER)]
+            [Authorize]
         async (
             [AsParameters] GetUsersRequest request,
             ISender sender) =>
@@ -91,15 +94,15 @@ public class UserEndpoints : ICarterModule
                 onFailure: handleFailure => handleFailure);
         });
 
-        //app.MapPost("/login", async (LoginRequest request, ISender sender) =>
-        //{
-        //    var command = LoginCommand.Create(request);
+        app.MapPost("/login", async (ISender sender) =>
+        {
+            var command = new LoginCommand();
 
-        //    Result<LoginResponse> result = await sender.Send(command);
+            Result<LoginResponse> result = await sender.Send(command);
 
-        //    return result.Match(
-        //        onSuccess: value => Results.Ok(value),
-        //        onFailure: handleFailure => handleFailure);
-        //});
+            return result.Match(
+                onSuccess: value => Results.Ok(value),
+                onFailure: handleFailure => handleFailure);
+        });
     }
 }

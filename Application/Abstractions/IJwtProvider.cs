@@ -6,7 +6,7 @@ namespace Application.Abstractions;
 
 public interface IJwtProvider
 {
-    string GenerateAccessToken(User user);
+    string GenerateAccessToken(/*User user*/);
 
     string GenerateRefreshToken();
 

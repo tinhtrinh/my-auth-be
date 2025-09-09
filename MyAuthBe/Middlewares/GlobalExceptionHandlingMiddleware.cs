@@ -24,6 +24,8 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
 
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
+            context.Response.ContentType = "application/json";
+
             ProblemDetails problem = new()
             {
                 Status = (int)HttpStatusCode.InternalServerError,
@@ -35,8 +37,6 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             string json = JsonSerializer.Serialize(problem);
 
             await context.Response.WriteAsync(json);
-
-            context.Response.ContentType = "application/json";
         }
     }
 }

@@ -43,9 +43,9 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UsePersistenceCleaner();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapCarter();
 
