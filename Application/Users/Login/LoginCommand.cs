@@ -3,4 +3,5 @@ using MediatR;
 
 namespace Application.Users.Login;
 
-public record LoginCommand() : IRequest<Result<LoginResponse>>;
+public record LoginCommand();
+    //: IRequest<Result<LoginResponse>>;

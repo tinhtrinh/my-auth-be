@@ -4,7 +4,8 @@ using MediatR;
 
 namespace Application.Users.Login;
 
-internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
+internal sealed class LoginCommandHandler 
+    //: IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     private readonly IJwtProvider _jwtProvider;
 

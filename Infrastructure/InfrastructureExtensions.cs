@@ -24,7 +24,7 @@ public static class InfrastructureExtensions
 
         services.AddEmailService();
 
-        services.AddMyAuthentication();
+        services.AddMyAuthentication(configuration);
 
         //services.AddMyAuthorization();
 

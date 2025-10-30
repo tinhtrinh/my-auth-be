@@ -6,6 +6,8 @@ using Presentation;
 using Hangfire;
 using Infrastructure.Notifications;
 using Persistence.Cleaners;
+using Infrastructure.Authentication;
+using MyAuthBe.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
-builder.Services.AddCors();
+builder.Services.AddMyAuthCors();
 
 builder.Services
     .AddApplication()
@@ -24,13 +26,7 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseCors(options =>
-{
-    options
-    .AllowAnyOrigin()
-    .AllowAnyHeader()
-    .AllowAnyMethod();
-});
+app.UseMyAuthCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -43,9 +39,7 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UsePersistenceCleaner();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
+app.UseMyAuthenticationAndAuthorization();
 
 app.MapCarter();
 

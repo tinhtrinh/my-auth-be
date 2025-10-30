@@ -94,15 +94,15 @@ public class UserEndpoints : ICarterModule
                 onFailure: handleFailure => handleFailure);
         });
 
-        app.MapPost("/login", async (ISender sender) =>
-        {
-            var command = new LoginCommand();
+        //app.MapPost("/login", async (ISender sender) =>
+        //{
+        //    var command = new LoginCommand();
 
-            Result<LoginResponse> result = await sender.Send(command);
+        //    Result<LoginResponse> result = await sender.Send(command);
 
-            return result.Match(
-                onSuccess: value => Results.Ok(value),
-                onFailure: handleFailure => handleFailure);
-        });
+        //    return result.Match(
+        //        onSuccess: value => Results.Ok(value),
+        //        onFailure: handleFailure => handleFailure);
+        //});
     }
 }
