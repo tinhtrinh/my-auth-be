@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace Infrastructure.Authentication;
 
@@ -12,18 +11,12 @@ public static class AuthenticationExtensions
 {
     public static IServiceCollection AddMyAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-
-        //services.ConfigureOptions<JwtOptionsSetup>();
-
-        //services.ConfigureOptions<JwtBearerOptionsSetup>();
-
-        //services.AddScoped<IJwtProvider, JwtProvider>();
-
         services.AddHttpClient();
 
         var idpSettings = configuration.GetSection("IdentityProviders:Keycloak");
         var authority = idpSettings["Authority"];
+        var clientId = idpSettings["ClientId"];
+        var clientSecret = idpSettings["ClientSecret"];
         var audience = idpSettings["Audience"];
         var requireHttps = bool.Parse(idpSettings["RequireHttpsMetadata"] ?? "false");
 
@@ -62,19 +55,11 @@ public static class AuthenticationExtensions
 
         services.AddScoped<IJwtProvider, JwtProvider>();
 
-        services.AddTransient<TokenRefreshMiddleware>();
-
-        services.AddTransient<JwtFromCookieMiddleware>();
-
         return services;
     }
 
     public static IApplicationBuilder UseMyAuthenticationAndAuthorization(this WebApplication app)
     {
-        app.UseMiddleware<TokenRefreshMiddleware>();
-
-        app.UseMiddleware<JwtFromCookieMiddleware>();
-
         app.UseAuthentication();
 
         app.UseAuthorization();

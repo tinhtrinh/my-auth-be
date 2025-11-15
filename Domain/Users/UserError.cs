@@ -25,4 +25,10 @@ public static class UserError
     public static readonly Error NoPassword = new("UserRule.NoPassword", "Password is required");
 
     public static Error ShortPassword(int? minPasswordLength) => new("UserRule.ShortPassword", $"Password minimum length is {minPasswordLength}");
+
+    public static readonly Error RefreshTokenNotFound = new("RefreshToken.NotFound", "Refresh Token Not Found");
+
+    public static readonly Error LogoutFail = new("RefreshToken.NotFound", "Refresh Token Not Found");
+
+    public static readonly Error GetJwtFail = new("Jwt.GetFail", "Get JWT fail");
 }

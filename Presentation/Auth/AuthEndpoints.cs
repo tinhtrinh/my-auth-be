@@ -1,14 +1,13 @@
 ﻿using Application.Auth.LoginCallback;
-using Azure;
+using Application.Auth.Logout;
+using Application.Auth.Refresh;
 using Carter;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http.Json;
+using Presentation.Extensions;
 
 namespace Presentation.Auth;
 
@@ -31,16 +30,16 @@ public class AuthEndpoints : ICarterModule
             return;
         });
 
-        group.MapGet("/login-callback", 
-            async (HttpContext context, 
+        group.MapGet("/login-callback",
+            async (HttpContext context,
                 IConfiguration config,
                 ISender sender) =>
         {
             var code = context.Request.Query["code"].FirstOrDefault();
-            var frontendUrl = config["FrontEnd:Url"];
+            var loginCallbackUrl = config["FrontEnd:LoginCallbackUrl"];
             var unauthenticatedUrl = config["FrontEnd:UnauthenticatedUrl"];
 
-            if (string.IsNullOrEmpty(frontendUrl))
+            if (string.IsNullOrEmpty(loginCallbackUrl))
             {
                 throw new ArgumentNullException("FrontEnd Url can not be null!");
             }
@@ -69,21 +68,7 @@ public class AuthEndpoints : ICarterModule
             var refreshToken = result.Value.RefreshToken;
             var expiresInUtc = result.Value.ExpiresInUtc;
 
-            // Lưu token vào cookie
-            context.Response.Cookies.Append("access_token", accessToken, new CookieOptions
-            {
-                HttpOnly = true, // bảo mật hơn, JS không đọc được
-                Secure = true,   // chỉ gửi qua HTTPS
-                SameSite = SameSiteMode.Strict
-            });
-
-            context.Response.Cookies.Append("expires_in", expiresInUtc, new CookieOptions
-            {
-                HttpOnly = true, // bảo mật hơn, JS không đọc được
-                Secure = true,   // chỉ gửi qua HTTPS
-                SameSite = SameSiteMode.Strict
-            });
-
+            // Lưu refresh token vào cookie
             context.Response.Cookies.Append("refresh_token", refreshToken, new CookieOptions
             {
                 HttpOnly = true,
@@ -91,9 +76,39 @@ public class AuthEndpoints : ICarterModule
                 SameSite = SameSiteMode.None
             });
 
-            // Redirect về frontend
-            context.Response.Redirect(frontendUrl);
+            // Redirect về FE kèm access token qua fragment
+            var redirectUrl = $"{loginCallbackUrl}#access_token={accessToken}&expires_in_utc={expiresInUtc}";
+            context.Response.Redirect(redirectUrl);
             return;
+        });
+
+        group.MapPost("/refresh", async (HttpContext context, ISender sender) =>
+        {
+            var refreshToken = context.Request.Cookies["refresh_token"];
+            var command = new RefreshCommand(refreshToken);
+            var result = await sender.Send(command);
+            var newRefreshToken = result.Value.RefreshToken;
+
+            context.Response.Cookies.Append("refresh_token", newRefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
+
+            return result.Match(
+                onSuccess: value => Results.Ok(value),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapPost("/logout", async (HttpContext context, ISender sender) =>
+        {
+            var refreshToken = context.Request.Cookies["refresh_token"];
+            var command = new LogoutCommand(refreshToken);
+            var result = await sender.Send(command);
+            return result.Match(
+                onSuccess: () => Results.NoContent(),
+                onFailure: handleFailure => handleFailure);
         });
     }
 }
