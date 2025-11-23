@@ -1,5 +1,6 @@
-﻿using Application.Abstractions;
-using Application.Shared;
+﻿using Application.Shared.Background;
+using Application.Shared.Notifications;
+using Application.Shared.UnitOfWork;
 using Domain.Notifications;
 using Domain.Shared;
 using Domain.Users;
@@ -43,7 +44,7 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
             DateTime.UtcNow,
             newUser.Id);
 
-        _backgroundService.Enqueue<IAddNotificationService>(service => service.AddNotification(notification, default));
+        _backgroundService.Enqueue<INotificationService>(service => service.SendAsync(notification, cancellationToken));
 
         return Result.Success(response);
     }

@@ -1,5 +1,4 @@
 ﻿using Domain.Notifications;
-using Domain.Roles;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

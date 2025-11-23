@@ -18,7 +18,7 @@ using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Application.Users.Login;
 
-namespace Presentation;
+namespace Presentation.User;
 
 public class UserEndpoints : ICarterModule
 {
@@ -28,7 +28,7 @@ public class UserEndpoints : ICarterModule
 
         group.MapGet("", 
             //[HasPermission(UserPermission.READ_USER)]
-            [Authorize]
+            //[Authorize]
         async (
             [AsParameters] GetUsersRequest request,
             ISender sender) =>

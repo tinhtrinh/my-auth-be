@@ -1,10 +1,11 @@
-﻿using Application.Abstractions;
-using Application.Notifications;
+﻿using Application.Shared.UnitOfWork;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.Cleaners;
 using Persistence.Notifications;
+using Persistence.Shared.Cleaner;
+using Persistence.UnitOfWorks;
 using Persistence.Users;
 
 namespace Persistence;
@@ -22,14 +23,17 @@ public static class PersistenceExtensions
 
         services.AddUserPersistence();
 
-        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddNotificationPersistence();
 
         services.AddCleaner();
 
-        //services.AddScoped<IUserRuleRepository, UserRuleRepository>();
-
-        //services.AddScoped<IRoleRepository, RoleRepository>();
-
         return services;
+    }
+
+    public static WebApplication UsePersistence(this WebApplication app)
+    {
+        app.UseCleaner();
+
+        return app;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Roles;
+﻿using Application.Users;
+using Domain.Roles;
 using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,8 @@ public class PermissionAuthorizationHandler
         IUserRepository userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
 
         var uid = new UserId(parsedUserId);
-        var user = await userRepository.GetUserWithRoles(uid);
+        //var user = await userRepository.GetUserWithRoles(uid);
+        User? user = null;
 
         if(user is not null && user.DoHavePermission(requirement.Permission))
         {

@@ -1,7 +1,4 @@
-﻿using Domain.Shared;
-using System.Security.Claims;
-
-namespace Application.Shared.Auth;
+﻿namespace Application.Shared.Auth;
 
 public interface IJwtProvider
 {

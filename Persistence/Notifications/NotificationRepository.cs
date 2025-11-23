@@ -1,7 +1,5 @@
 ﻿using Application.Notifications;
 using Domain.Notifications;
-using Domain.Users;
-using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Notifications;
 

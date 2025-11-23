@@ -58,7 +58,7 @@ public static class AuthenticationExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseMyAuthenticationAndAuthorization(this WebApplication app)
+    public static WebApplication UseMyAuthenticationAndAuthorization(this WebApplication app)
     {
         app.UseAuthentication();
 

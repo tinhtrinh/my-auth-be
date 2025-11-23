@@ -1,10 +1,9 @@
-﻿using Application.Abstractions;
+﻿using Application.Shared.UnitOfWork;
 using Domain.AuditLogs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Persistence;
+namespace Persistence.UnitOfWorks;
 
 public class UnitOfWork : IUnitOfWork
 {

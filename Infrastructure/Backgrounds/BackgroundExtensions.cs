@@ -1,7 +1,9 @@
-﻿using Application.Abstractions;
+﻿using Application.Shared.Background;
 using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Shared.Background;
 
 namespace Infrastructure.Backgrounds;
 
@@ -16,6 +18,15 @@ public static class BackgroundExtensions
 
         services.AddTransient<IBackgroundService, BackgroundService>();
 
+        services.AddTransient<IPersBackgroundService, PersBackgroundService>();
+
         return services;
+    }
+
+    public static WebApplication UseBackgroundService(this WebApplication app)
+    {
+        app.UseHangfireDashboard();
+
+        return app;
     }
 }

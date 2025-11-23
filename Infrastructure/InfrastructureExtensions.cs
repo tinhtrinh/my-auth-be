@@ -1,9 +1,10 @@
 ﻿//using Infrastructure.Authorization;
-using Application.Notifications;
 using Infrastructure.Authentication;
 using Infrastructure.Backgrounds;
 using Infrastructure.Email;
-using Infrastructure.Notifications;
+using Infrastructure.Logger;
+using Infrastructure.RealTime;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -18,16 +19,29 @@ public static class InfrastructureExtensions
 
         services.AddBackgroundService(configuration);
 
-        services.AddSignalR();
-
-        services.AddTransient<IRealTimeNotifier, RealTimeNotifier>();
-
         services.AddEmailService();
 
         services.AddMyAuthentication(configuration);
 
         //services.AddMyAuthorization();
 
+        services.AddRealTimeService();
+
         return services;
+    }
+
+    public static WebApplication UseInfrastructure(this WebApplication app)
+    {
+        app.UseRequestLogging();
+
+        app.UsePersistence();
+
+        app.UseMyAuthenticationAndAuthorization();
+
+        app.UseBackgroundService();
+
+        app.UseRealTimeService();
+
+        return app;
     }
 }

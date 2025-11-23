@@ -1,4 +1,4 @@
-﻿using Application.Abstractions;
+﻿using Application.Shared.Background;
 using Application.Shared.Email;
 using Domain.Shared;
 using MediatR;

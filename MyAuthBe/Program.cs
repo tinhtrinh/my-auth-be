@@ -1,50 +1,48 @@
 using Application;
 using MyAuth.Middlewares;
-using Carter;
 using Infrastructure;
 using Presentation;
-using Hangfire;
-using Infrastructure.Notifications;
-using Persistence.Cleaners;
-using Infrastructure.Authentication;
 using MyAuthBe.Cors;
+using Infrastructure.Logger;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
-
-builder.Services.AddMyAuthCors();
-
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
-    .AddPresentation();
-
-var app = builder.Build();
-
-app.UseMyAuthCors();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var builder = WebApplication.CreateBuilder(args);
+
+    MyAuthLoggerExtensions.CreateLogger(builder.Configuration);
+
+    builder.Host.UseLogger();
+
+    // Add services to the container.
+    builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
+    builder.Services.AddMyAuthCors();
+
+    builder.Services
+        .AddApplication()
+        .AddInfrastructure(builder.Configuration)
+        .AddPresentation();
+
+    var app = builder.Build();
+
+    app.UseMyAuthCors();
+
+    // Configure the HTTP request pipeline.
+
+    app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+    app.UseInfrastructure();
+
+    app.UsePresentation();
+
+    app.Run();
 }
-
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-
-app.UsePersistenceCleaner();
-
-app.UseMyAuthenticationAndAuthorization();
-
-app.MapCarter();
-
-app.UseHangfireDashboard();
-
-app.MapHub<NotificationHub>("notification");
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application failed to start");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
