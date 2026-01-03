@@ -32,7 +32,7 @@ public sealed class LoginCallbackCommandHandler : IRequestHandler<LoginCallbackC
             return Result.Failure<LoginCallbackResponse>(new Error("Jwt.Fail", "Get JWT fail"));
         }
 
-        var expiresInUtc = DateTime.UtcNow.AddSeconds(expiresIn).ToString();
+        var expiresInUtc = DateTime.UtcNow.AddSeconds(expiresIn).ToString("O");
         var response = new LoginCallbackResponse(accessToken, refreshToken, expiresInUtc);
         return Result.Success(response);
     }

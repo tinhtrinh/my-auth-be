@@ -1,8 +1,6 @@
 using Application;
-using MyAuth.Middlewares;
 using Infrastructure;
 using Presentation;
-using MyAuthBe.Cors;
 using Infrastructure.Logger;
 using Serilog;
 
@@ -15,10 +13,6 @@ try
     builder.Host.UseLogger();
 
     // Add services to the container.
-    builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
-
-    builder.Services.AddMyAuthCors();
-
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
@@ -26,15 +20,12 @@ try
 
     var app = builder.Build();
 
-    app.UseMyAuthCors();
-
     // Configure the HTTP request pipeline.
-
-    app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+    app.UseEarlyPresentation();
 
     app.UseInfrastructure();
 
-    app.UsePresentation();
+    app.UseLatePresentation();
 
     app.Run();
 }

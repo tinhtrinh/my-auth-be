@@ -87,17 +87,20 @@ public class AuthEndpoints : ICarterModule
             var refreshToken = context.Request.Cookies["refresh_token"];
             var command = new RefreshCommand(refreshToken);
             var result = await sender.Send(command);
-            var newRefreshToken = result.Value.RefreshToken;
-
-            context.Response.Cookies.Append("refresh_token", newRefreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None
-            });
 
             return result.Match(
-                onSuccess: value => Results.Ok(value),
+                onSuccess: value => {
+                    var newRefreshToken = result.Value.RefreshToken;
+
+                    context.Response.Cookies.Append("refresh_token", newRefreshToken, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
+
+                    return Results.Ok(value);
+                },
                 onFailure: handleFailure => handleFailure);
         });
 

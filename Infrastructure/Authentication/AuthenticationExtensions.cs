@@ -1,4 +1,5 @@
 ﻿using Application.Shared.Auth;
+using Infrastructure.RealTime;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,8 @@ public static class AuthenticationExtensions
         var clientSecret = idpSettings["ClientSecret"];
         var audience = idpSettings["Audience"];
         var requireHttps = bool.Parse(idpSettings["RequireHttpsMetadata"] ?? "false");
+
+        services.AddSingleton<RealTimeJwtBearerEvents>();
 
         // Thêm xác thực JWT
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -49,6 +52,8 @@ public static class AuthenticationExtensions
                         return Task.CompletedTask;
                     }
                 };
+
+                options.EventsType = typeof(RealTimeJwtBearerEvents);
             });
 
         services.AddAuthorization();

@@ -39,7 +39,7 @@ public sealed class RefreshCommandHandler : IRequestHandler<RefreshCommand, Resu
             return Result.Failure<RefreshResponse>(UserError.GetJwtFail);
         }
 
-        var newExpiresInUtc = DateTime.UtcNow.AddSeconds(newExpiresIn).ToString();
+        var newExpiresInUtc = DateTime.UtcNow.AddSeconds(newExpiresIn).ToString("O");
         var response = new RefreshResponse(newAccessToken, newRefreshToken, newExpiresInUtc);
         return Result.Success(response);
     }

@@ -8,21 +8,21 @@ namespace Infrastructure.Backgrounds;
 public class BackgroundService : IBackgroundService
 {
     private readonly IBackgroundJobClient _backgroundJobClient;
-    private readonly ILogger<PersBackgroundService> _logger;
+    private readonly ILogger<BackgroundService> _logger;
 
-    public BackgroundService(IBackgroundJobClient backgroundJobClient, ILogger<PersBackgroundService> logger)
+    public BackgroundService(IBackgroundJobClient backgroundJobClient, ILogger<BackgroundService> logger)
     {
         _backgroundJobClient = backgroundJobClient;
         _logger = logger;
     }
 
-    public void Enqueue<TService>(Expression<Func<TService, Task>> task)
+    public void Enqueue<T>(Expression<Func<T, Task>> methodCall)
     {
         try
         {
             _logger.LogInformation("Background service enqueues job");
 
-            _backgroundJobClient.Enqueue(task);
+            _backgroundJobClient.Enqueue(methodCall);
 
             _logger.LogInformation("Background service enqueues job successfully.");
         }

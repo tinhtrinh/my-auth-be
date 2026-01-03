@@ -17,6 +17,7 @@ using Infrastructure.Authorization;
 using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Application.Users.Login;
+using Application.Users.Export;
 
 namespace Presentation.User;
 
@@ -88,6 +89,29 @@ public class UserEndpoints : ICarterModule
         {
             var command = new SendVerifyEmailCommand();
             Result result = await sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => Results.Ok(),
+                onFailure: handleFailure => handleFailure);
+        });
+
+        group.MapGet("/export",
+        async (
+            string connectionId,
+            HttpContext httpContext,
+            ISender sender) =>
+        {
+            var authHeader = httpContext.Request.Headers["Authorization"].ToString();
+
+            string? token = null; 
+            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ")) 
+            { 
+                token = authHeader.Substring("Bearer ".Length).Trim(); 
+            }
+
+            var query = new ExportQuery(connectionId, token);
+
+            Result result = await sender.Send(query);
 
             return result.Match(
                 onSuccess: () => Results.Ok(),

@@ -1,4 +1,7 @@
-﻿namespace MyAuthBe.Cors;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Presentation.Cors;
 
 public static class CorsExtensions
 {
@@ -25,7 +28,7 @@ public static class CorsExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseMyAuthCors(this IApplicationBuilder app)
+    public static WebApplication UseMyAuthCors(this WebApplication app)
     {
         app.UseCors("AllowAngular");
 

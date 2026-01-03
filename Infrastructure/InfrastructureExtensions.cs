@@ -2,6 +2,7 @@
 using Infrastructure.Authentication;
 using Infrastructure.Backgrounds;
 using Infrastructure.Email;
+using Infrastructure.Export;
 using Infrastructure.Logger;
 using Infrastructure.RealTime;
 using Microsoft.AspNetCore.Builder;
@@ -27,16 +28,18 @@ public static class InfrastructureExtensions
 
         services.AddRealTimeService();
 
+        services.AddExportService();
+
         return services;
     }
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
+        app.UseMyAuthenticationAndAuthorization();
+
         app.UseRequestLogging();
 
         app.UsePersistence();
-
-        app.UseMyAuthenticationAndAuthorization();
 
         app.UseBackgroundService();
 

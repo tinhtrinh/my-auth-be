@@ -1,6 +1,7 @@
 ﻿using Application.Shared.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 
 namespace Infrastructure.Authentication;
@@ -179,5 +180,12 @@ public class JwtProvider : IJwtProvider
         }
 
         return true;
+    }
+
+    public string? GetUserIdFromToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(token);
+        return jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
     }
 }
