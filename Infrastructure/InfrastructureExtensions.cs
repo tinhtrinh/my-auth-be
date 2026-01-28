@@ -1,9 +1,11 @@
 ﻿//using Infrastructure.Authorization;
 using Infrastructure.Authentication;
+using Infrastructure.Authorization;
 using Infrastructure.Backgrounds;
 using Infrastructure.Email;
 using Infrastructure.Export;
 using Infrastructure.Logger;
+using Infrastructure.Persistence;
 using Infrastructure.RealTime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +18,8 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddNewPersistence(configuration);
+
         services.AddPersistence(configuration);
 
         services.AddBackgroundService(configuration);
@@ -24,7 +28,7 @@ public static class InfrastructureExtensions
 
         services.AddMyAuthentication(configuration);
 
-        //services.AddMyAuthorization();
+        services.AddMyAuthorization();
 
         services.AddRealTimeService();
 

@@ -28,8 +28,7 @@ public class UserEndpoints : ICarterModule
         var group = app.MapGroup("api/users");
 
         group.MapGet("", 
-            //[HasPermission(UserPermission.READ_USER)]
-            //[Authorize]
+            [HasPermission(UserPermission.READ_USER)]
         async (
             [AsParameters] GetUsersRequest request,
             ISender sender) =>

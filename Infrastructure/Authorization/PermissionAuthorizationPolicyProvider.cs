@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Authorization;
 
+// class này để Dynamic policy, không cần phải khai báo trước tất cả policy trong AddAuthorization, mà sẽ tự động tạo policy với PermissionRequirement
+// vừa dùng được dynamic policy, vừa dùng được policy khai báo ở AddAuthorization
 public class PermissionAuthorizationPolicyProvider
     : DefaultAuthorizationPolicyProvider
 {

@@ -1,12 +1,13 @@
-﻿using Domain.Users;
+﻿using Domain.Permissions;
+using Domain.Users;
 
 namespace Domain.Roles;
 
-public sealed class Role
+public sealed partial class Role
 {
     public RoleId Id { get; private set; }
 
-    public bool IsDeleted { get; private set; }
+    public bool? IsDeleted { get; private set; }
 
     public string Name { get; private set; }
 
@@ -16,16 +17,9 @@ public sealed class Role
 
     public static Role Registered = new Role(new RoleId(new Guid()), "Registered");
 
-    public Role(RoleId id, string name)
+    public bool HasPermission(string permission)
     {
-        Id = id;
-        IsDeleted = false;
-        Name = name;
-    }
-
-    public bool DoHavePermission(string permission)
-    {
-        if (Permissions is null || Permissions.Count == 0) return false;
+        if (Permissions is null) return false;
         return Permissions.Any(x => x.Name == permission);
     }
 }

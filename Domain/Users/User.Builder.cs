@@ -1,4 +1,6 @@
-﻿namespace Domain.Users;
+﻿using Domain.Roles;
+
+namespace Domain.Users;
 
 public partial class User
 {
@@ -18,6 +20,8 @@ public partial class User
 
         internal string? Password;
 
+        internal ICollection<Role>? Roles;
+
         public Builder(UserId id, string name)
         {
             Id = id;
@@ -36,12 +40,19 @@ public partial class User
             return this;
         }
 
+        public Builder SetRoles(ICollection<Role>? roles)
+        {
+            Roles = roles;
+            return this;
+        }
+
         public User Build()
         {
             return new User(Id, Name)
             {
                 IsDeleted = IsDeleted,
-                Password = Password
+                Password = Password,
+                Roles = Roles
             };
         }
     }

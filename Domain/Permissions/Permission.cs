@@ -1,6 +1,6 @@
-﻿using System.Data;
+﻿using Domain.Roles;
 
-namespace Domain.Roles;
+namespace Domain.Permissions;
 
 public class Permission
 {

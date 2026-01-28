@@ -1,9 +1,7 @@
-﻿using Application.Users;
-using Domain.Roles;
-using Domain.Users;
+﻿using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Infrastructure.Authorization;
 
@@ -22,7 +20,7 @@ public class PermissionAuthorizationHandler
         PermissionRequirement requirement)
     {
         string? userId = context.User.Claims.FirstOrDefault(
-            x => x.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if(!Guid.TryParse(userId, out Guid parsedUserId))
         {
@@ -31,13 +29,14 @@ public class PermissionAuthorizationHandler
 
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
 
-        IUserRepository userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+        // phải lấy userRepository kiểu này để khi hàm chạy xong thì hủy vòng đời luôn, không gây tốn tài nguyên,
+        // không bị phụ thuộc vào vòng đời của class cha là singleton, mà đúng với cách nó đăng ký là scope
+        IAuthorizationUserService authorizationUserRepository = scope.ServiceProvider.GetRequiredService<IAuthorizationUserService>();
 
         var uid = new UserId(parsedUserId);
-        //var user = await userRepository.GetUserWithRoles(uid);
-        User? user = null;
+        var user = await authorizationUserRepository.GetUserWithRoles(uid);
 
-        if(user is not null && user.DoHavePermission(requirement.Permission))
+        if(user is not null && user.HasPermission(requirement.Permission))
         {
             context.Succeed(requirement);
         }

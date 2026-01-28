@@ -40,44 +40,6 @@ public partial class User : AuditableUser
         return Result.Success();
     }
 
-
-    //private User(UserId id, string name, string password)
-    //{
-    //    Id = id;
-    //    Name = "";
-    //    Password = "";
-    //}
-
-    //public static User Create(UserId id, string name, string password, RefreshToken? refreshToken = null, List<Role>? roles = null)
-    //{
-    //    return new User(id, name, password)
-    //    {
-    //        RefreshToken = refreshToken,
-    //        Roles = roles
-    //    };
-    //}
-
-    //public static User Create(User user)
-    //{
-    //    return new User(user.Id, user.Name, user.Password);
-    //}
-
-    //public static User CreateWithRoles(User user)
-    //{
-    //    return new User(user.Id, user.Name, user.Password)
-    //    {
-    //        Roles = user.Roles
-    //    };
-    //}
-
-    //public static User CreateWithRefreshToken(User user)
-    //{
-    //    return new User(user.Id, user.Name, user.Password)
-    //    {
-    //        RefreshToken = user.RefreshToken
-    //    };
-    //}
-
     public Result AddRefreshToken(string refreshTokenValue)
     {
         if (refreshTokenValue == string.Empty)
@@ -120,9 +82,9 @@ public partial class User : AuditableUser
         return RefreshToken.IsRefreshTokenExpired();
     }
 
-    public bool DoHavePermission(string permission)
+    public bool HasPermission(string permission)
     {
         if (Roles is null) return false;
-        return Roles.Any(r => r.DoHavePermission(permission));
+        return Roles.Any(r => r.HasPermission(permission));
     }
 }
