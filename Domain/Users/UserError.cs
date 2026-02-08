@@ -31,4 +31,8 @@ public static class UserError
     public static readonly Error LogoutFail = new("RefreshToken.NotFound", "Refresh Token Not Found");
 
     public static readonly Error GetJwtFail = new("Jwt.GetFail", "Get JWT fail");
+
+    public static readonly Error NoRole = new("User.NoRole", "User has no role.");
+
+    public static readonly Error NoRequirePermission = new("User.NoRequirePermission", "User has no require permission.");
 }

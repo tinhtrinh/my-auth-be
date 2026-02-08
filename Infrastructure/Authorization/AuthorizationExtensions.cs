@@ -14,6 +14,8 @@ public static class AuthorizationExtensions
 
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
+        services.AddSingleton<IAuthorizationMiddlewareResultHandler, MyAuthorizationMiddlewareResultHandler>();
+
         return services;
     }
 }

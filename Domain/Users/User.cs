@@ -87,4 +87,9 @@ public partial class User : AuditableUser
         if (Roles is null) return false;
         return Roles.Any(r => r.HasPermission(permission));
     }
+
+    public bool HasNoRole()
+    {
+        return Roles is null || Roles.Count == 0;
+    }
 }

@@ -36,9 +36,31 @@ public class PermissionAuthorizationHandler
         var uid = new UserId(parsedUserId);
         var user = await authorizationUserRepository.GetUserWithRoles(uid);
 
-        if(user is not null && user.HasPermission(requirement.Permission))
+        if(user is null)
+        {
+            var reason = new AuthorizationFailureReason(this, UserError.UserNotFound.Message);
+            context.Fail(reason);
+            return;
+        }
+
+        if(user is not null && user.HasNoRole())
+        {
+            var reason = new AuthorizationFailureReason(this, UserError.NoRole.Message);
+            context.Fail(reason);
+            return;
+        }
+
+        if (user is not null && !user.HasPermission(requirement.Permission))
+        {
+            var reason = new AuthorizationFailureReason(this, UserError.NoRequirePermission.Message);
+            context.Fail(reason);
+            return;
+        }
+
+        if (user is not null && user.HasPermission(requirement.Permission))
         {
             context.Succeed(requirement);
+            return;
         }
     }
 }
