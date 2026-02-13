@@ -18,6 +18,7 @@ using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Application.Users.Login;
 using Application.Users.Export;
+using Application.Users.DownloadAvatar;
 
 namespace Presentation.User;
 
@@ -127,5 +128,19 @@ public class UserEndpoints : ICarterModule
         //        onSuccess: value => Results.Ok(value),
         //        onFailure: handleFailure => handleFailure);
         //});
+
+        group.MapGet("/download-avatar", async (string userId, ISender sender) =>
+        {
+            var query = new DownloadAvatarQuery(userId);
+
+            var result = await sender.Send(query);
+
+            return result.Match(
+                onSuccess: value =>
+                {
+                    return Results.File(value.FileStream, value.ContentType, value.FileName);
+                },
+                onFailure: handleFailure => handleFailure);
+        });
     }
 }

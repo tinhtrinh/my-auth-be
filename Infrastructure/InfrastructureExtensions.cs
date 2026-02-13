@@ -4,6 +4,7 @@ using Infrastructure.Authorization;
 using Infrastructure.Backgrounds;
 using Infrastructure.Email;
 using Infrastructure.Export;
+using Infrastructure.Files;
 using Infrastructure.Logger;
 using Infrastructure.Persistence;
 using Infrastructure.RealTime;
@@ -33,6 +34,8 @@ public static class InfrastructureExtensions
         services.AddRealTimeService();
 
         services.AddExportService();
+
+        services.AddFileService();
 
         return services;
     }

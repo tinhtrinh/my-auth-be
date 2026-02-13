@@ -47,5 +47,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Ignore(u => u.AuditableProperties);
+
+        builder.HasOne(u => u.Avatar)
+            .WithOne(fr => fr.User)
+            .HasForeignKey<User>(u => u.AvatarId);
     }
 }

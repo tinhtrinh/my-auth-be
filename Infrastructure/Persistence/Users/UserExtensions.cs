@@ -1,10 +1,12 @@
 ﻿using Application.Users;
 using Application.Users.Delete;
+using Application.Users.DownloadAvatar;
 using Application.Users.GetUsers;
 using Application.Users.ListView;
 using Application.Users.Update;
 using Infrastructure.Authorization;
 using Infrastructure.Persistence.Users.Authorization;
+using Infrastructure.Persistence.Users.DownloadAvatar;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Users.Delete;
 using Persistence.Users.GetUsers;
@@ -28,6 +30,8 @@ internal static class UserExtensions
         //services.AddScoped<IGetUserListService, GetUserListService>();
 
         services.AddTransient<IAuthorizationUserService, AuthorizationUserService>();
+
+        services.AddScoped<IDAUserService, DAUserService>();
 
         return services;
     }

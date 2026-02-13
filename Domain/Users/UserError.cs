@@ -35,4 +35,6 @@ public static class UserError
     public static readonly Error NoRole = new("User.NoRole", "User has no role.");
 
     public static readonly Error NoRequirePermission = new("User.NoRequirePermission", "User has no require permission.");
+
+    public static readonly Error NoAvatar = new("User.NoAvatar", "User has no avatar.");
 }

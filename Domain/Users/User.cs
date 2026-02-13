@@ -1,4 +1,5 @@
 ﻿using Domain.AuditLogs;
+using Domain.Files;
 using Domain.Notifications;
 using Domain.Roles;
 using Domain.Shared;
@@ -22,6 +23,10 @@ public partial class User : AuditableUser
     public ICollection<Notification>? Notifications { get; private set; }
 
     public ICollection<AuditLog>? AuditLogs { get; private set; }
+
+    public Guid? AvatarId { get; private set; }
+
+    public FileRecord? Avatar { get; private set; }
 
     public Result ChangeNameAndPassword(string name, string password)
     {
