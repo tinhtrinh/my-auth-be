@@ -1,8 +1,8 @@
 ﻿namespace Application.Shared.Files;
 
-public interface IFileService
+public interface IFileStorageService
 {
-    Task<Stream?> GetFileStreamAsync(Guid fileId);
+    Task<Stream?> GetFileStreamAsync(string fileName);
 
     //Task<FileRecord> UploadFileAsync(IFormFile file);
 }

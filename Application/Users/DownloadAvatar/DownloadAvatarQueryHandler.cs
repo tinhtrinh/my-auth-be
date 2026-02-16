@@ -8,12 +8,12 @@ namespace Application.Users.DownloadAvatar;
 internal class DownloadAvatarQueryHandler : IRequestHandler<DownloadAvatarQuery, Result<DownloadAvatarResponse>>
 {
     private readonly IDAUserService _dAUserService;
-    private readonly IFileService _fileService;
+    private readonly IFileStorageService _fileStorageService;
 
-    public DownloadAvatarQueryHandler(IDAUserService dAUserService, IFileService fileService)
+    public DownloadAvatarQueryHandler(IDAUserService dAUserService, IFileStorageService fileStorageService)
     {
         _dAUserService = dAUserService;
-        _fileService = fileService;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<Result<DownloadAvatarResponse>> Handle(DownloadAvatarQuery request, CancellationToken cancellationToken)
@@ -33,14 +33,9 @@ internal class DownloadAvatarQueryHandler : IRequestHandler<DownloadAvatarQuery,
             return Result.Failure<DownloadAvatarResponse>(UserError.NoAvatar);
         }
 
-        var stream = await _fileService.GetFileStreamAsync(avatar.Id);
+        var stream = await _fileStorageService.GetFileStreamAsync(avatar.FileName);
 
-        if (stream is null)
-        {
-            return Result.Failure<DownloadAvatarResponse>(UserError.NoAvatar);
-        }
-
-        if (string.IsNullOrEmpty(avatar.ContentType))
+        if (stream is null || string.IsNullOrEmpty(avatar.ContentType))
         {
             return Result.Failure<DownloadAvatarResponse>(UserError.NoAvatar);
         }

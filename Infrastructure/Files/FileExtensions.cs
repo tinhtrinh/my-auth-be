@@ -9,8 +9,6 @@ public static class FileExtensions
     {
         services.AddScoped<IFileStorageService, FileStorageService>();
 
-        services.AddScoped<IFileService, FileService>();
-
         return services;
     }
 }
