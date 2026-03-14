@@ -97,4 +97,13 @@ public partial class User : AuditableUser
     {
         return Roles is null || Roles.Count == 0;
     }
+
+    public bool SetAvatarName(string name, string path)
+    {
+        if (Avatar is null) return false;
+
+        Avatar.SetFileName(name);
+        Avatar.SetPath(path);
+        return true;
+    }
 }

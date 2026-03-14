@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Users.Export;
 
-public record ExportQuery(string ConnectionId, string? Token) : IRequest<Result>;
+public record ExportQuery(string ConnectionId, string? UserId) : IRequest<Result>;

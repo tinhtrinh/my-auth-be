@@ -19,6 +19,10 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Users.Login;
 using Application.Users.Export;
 using Application.Users.DownloadAvatar;
+using Application.Users.UploadAvatar;
+using Microsoft.AspNetCore.Mvc;
+using Presentation.User.UploadAvatar;
+using System.Security.Claims;
 
 namespace Presentation.User;
 
@@ -28,7 +32,7 @@ public class UserEndpoints : ICarterModule
     {
         var group = app.MapGroup("api/users");
 
-        group.MapGet("", 
+        group.MapGet("",
             [HasPermission(UserPermission.READ_USER)]
         async (
             [AsParameters] GetUsersRequest request,
@@ -101,15 +105,9 @@ public class UserEndpoints : ICarterModule
             HttpContext httpContext,
             ISender sender) =>
         {
-            var authHeader = httpContext.Request.Headers["Authorization"].ToString();
+            var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            string? token = null; 
-            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ")) 
-            { 
-                token = authHeader.Substring("Bearer ".Length).Trim(); 
-            }
-
-            var query = new ExportQuery(connectionId, token);
+            var query = new ExportQuery(connectionId, userId);
 
             Result result = await sender.Send(query);
 
@@ -142,5 +140,22 @@ public class UserEndpoints : ICarterModule
                 },
                 onFailure: handleFailure => handleFailure);
         });
+
+        group.MapPost("/upload-avatar", async ([FromForm] UploadAvatarRequest request, HttpContext context, ISender sender) =>
+        {
+            var userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var avatarName = request.AvatarFile.FileName;
+
+            var avatarStream = request.AvatarFile.OpenReadStream();
+
+            var command = new UploadAvatarCommand(userId, avatarName, avatarStream);
+
+            Result result = await sender.Send(command);
+
+            return result.Match(
+                onSuccess: () => Results.Ok(),
+                onFailure: handleFailure => handleFailure);
+        }).DisableAntiforgery();
     }
 }

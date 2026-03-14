@@ -20,16 +20,9 @@ internal class ExportQueryHandler : IRequestHandler<ExportQuery, Result>
     public Task<Result> Handle(ExportQuery request, CancellationToken cancellationToken)
     {
         var connectionId = request.ConnectionId;
-        var token = request.Token;
+        var userId = request.UserId;
 
-        if (token is null)
-        {
-            return Task.FromResult(Result.Failure(UserError.UserNotFound));
-        }
-
-        var userId = _jwtProvider.GetUserIdFromToken(token);
-
-        if(string.IsNullOrEmpty(userId))
+        if (string.IsNullOrEmpty(userId))
         {
             return Task.FromResult(Result.Failure(UserError.UserNotFound));
         }

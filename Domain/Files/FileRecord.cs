@@ -17,4 +17,14 @@ public partial class FileRecord
     public string? ContentType { get; private set; }
 
     public User? User { get; private set; }
+
+    public void SetFileName(string name)
+    {
+        FileName = name;
+    }
+
+    public void SetPath(string path)
+    {
+        Path = path;
+    }
 }

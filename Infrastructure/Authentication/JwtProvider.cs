@@ -181,11 +181,4 @@ public class JwtProvider : IJwtProvider
 
         return true;
     }
-
-    public string? GetUserIdFromToken(string token)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(token);
-        return jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-    }
 }

@@ -4,5 +4,5 @@ public interface IFileStorageService
 {
     Task<Stream?> GetFileStreamAsync(string fileName);
 
-    //Task<FileRecord> UploadFileAsync(IFormFile file);
+    Task<string?> UploadFileAsync(string fileName, Stream fileStream);
 }

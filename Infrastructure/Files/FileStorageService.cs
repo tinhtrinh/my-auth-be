@@ -16,4 +16,21 @@ public class FileStorageService : IFileStorageService
 
         return Task.FromResult<Stream?>(new FileStream(path, FileMode.Open, FileAccess.Read));
     }
+
+    public async Task<string?> UploadFileAsync(string fileName, Stream fileStream)
+    {
+        if (string.IsNullOrWhiteSpace(fileName) || fileStream == null)
+        {
+            return null;
+        }
+
+        var uploadPath = Path.Combine(STORAGE_FOLDER, fileName);
+
+        using (var file = new FileStream(uploadPath, FileMode.Create, FileAccess.Write))
+        {
+            await fileStream.CopyToAsync(file);
+        }
+
+        return uploadPath;
+    }
 }

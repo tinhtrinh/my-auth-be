@@ -37,4 +37,6 @@ public static class UserError
     public static readonly Error NoRequirePermission = new("User.NoRequirePermission", "User has no require permission.");
 
     public static readonly Error NoAvatar = new("User.NoAvatar", "User has no avatar.");
+
+    public static readonly Error UploadAvatarFail = new("User.UploadAvatarFail", "Upload Avatar Fail.");
 }

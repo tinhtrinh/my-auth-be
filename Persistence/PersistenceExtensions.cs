@@ -19,7 +19,7 @@ public static class PersistenceExtensions
                 configuration.GetConnectionString("DevDB"))
         );
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddUserPersistence();
 

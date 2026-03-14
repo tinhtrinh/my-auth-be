@@ -1,4 +1,5 @@
 ﻿using Application.Shared.UnitOfWork;
+using Infrastructure.Persistence.UnitOfWorks;
 using Infrastructure.Persistence.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Notifications;
 using Persistence.Shared.Cleaner;
-using Persistence.UnitOfWorks;
 using Persistence.Users;
 
 namespace Infrastructure.Persistence;
@@ -20,7 +20,7 @@ public static class PersistenceExtensions
                 configuration.GetConnectionString("DevDB"))
         );
 
-        //services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddUserPersistence();
 

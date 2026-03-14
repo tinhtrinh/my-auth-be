@@ -1,4 +1,5 @@
-﻿using Domain.Roles;
+﻿using Domain.Files;
+using Domain.Roles;
 
 namespace Domain.Users;
 
@@ -21,6 +22,8 @@ public partial class User
         internal string? Password;
 
         internal ICollection<Role>? Roles;
+
+        internal FileRecord? Avatar;
 
         public Builder(UserId id, string name)
         {
@@ -46,13 +49,20 @@ public partial class User
             return this;
         }
 
+        public Builder SetAvatar(FileRecord? avatar)
+        {
+            Avatar = avatar;
+            return this;
+        }
+
         public User Build()
         {
             return new User(Id, Name)
             {
                 IsDeleted = IsDeleted,
                 Password = Password,
-                Roles = Roles
+                Roles = Roles,
+                Avatar = Avatar
             };
         }
     }
